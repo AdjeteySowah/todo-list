@@ -1,0 +1,98 @@
+
+   /* || HOST FONTS */
+@font-face {
+   font-family: "Ubuntu";
+   font-weight: 500;
+   src: url("./assets/fonts/ubuntu-medium-webfont.woff2") format("woff2"),
+        url("./assets/fonts/ubuntu-medium-webfont.woff") format("woff");
+   font-display: swap;
+}
+
+@font-face {
+   font-family: "Ubuntu";
+   font-weight: 700;
+   src: url("./assets/fonts/ubuntu-bold-webfont.woff2") format("woff2"),
+        url("./assets/fonts/ubuntu-bold-webfont.woff") format("woff");
+   font-display: swap;
+}
+
+
+   /* || RESET */
+*,
+::before,
+::after {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+}
+
+html {
+   font-size: 10px;
+   line-height: 1.3;
+}
+
+body {
+   -webkit-font-smoothing: antialiased;
+}
+
+img {
+   display: inline-block;
+   max-width: 100%;
+}
+
+p, h1, h3, input, button {
+   font: inherit;
+   overflow-wrap: break-word;
+}
+
+p {
+   text-wrap: pretty;
+}
+
+h1, h3 {
+   text-wrap: balance;
+}
+
+#root, #__next {
+   isolation: isolate;
+}
+
+
+   /* || CUSTOM PROPERTIES */
+:root {
+   --white: rgb(255, 255, 255);
+   --black: rgb(0, 0, 0);
+   --light-black: rgba(0, 0, 0, 0.5);
+   --orange-red: rgb(255, 69, 0);
+}
+
+
+   /* || GENERAL STYLES */
+/* html {
+   position: relative;
+   background: none;
+}
+
+html::before {
+   content: "";
+   position: absolute;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background-color: var(--orange-red);
+   background-image: url(./assets/images/pizza.jpg);
+   background-repeat: no-repeat;
+   background-size: cover;
+   background-attachment: fixed;
+   filter: blur(2.5px);
+   z-index: -1;
+} */
+
+body {
+   font-family: "Ubuntu", system-ui, serif;
+   font-weight: 500;
+   font-size: 1.6rem;
+   color: black;
+   background-color: aqua;
+}
