@@ -4,27 +4,79 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Restaurant</title>
+   <title>Todo List</title>
 </head>
 
 <body>
    <header class="header">
-      <h1 class="header__title">PitZas</h1>
-      <nav class="header__nav">
-         <button type="button" class="header__button">Home</button>
-         <button type="button" class="header__button">Menu</button>
-         <button type="button" class="header__button">Contact</button>
-      </nav>
+      <img class="header__img" src="./assets/images/checkbox-circle-plus.svg" alt="check in circle icon">
+      <h1 class="header__title">Todo List</h1>
    </header>
 
-   <div id="content">
+   <aside class="sidebar">
+      <div class="sidebar__main-section">
+         <div class="sidebar__main-item sidebar__item--inbox active" data-value="inbox">
+            <div class="sidebar__item-description">
+               <img class="sidebar__item-img" src="./assets/images/inbox.svg" alt="inbox icon">
+               Inbox
+            </div>
+         </div>
+         <div class="sidebar__main-item sidebar__item--today" data-value="today">
+            <div class="sidebar__item-description">
+               <img class="sidebar__item-img" src="./assets/images/calendar-today.svg" alt="calender today icon">
+               Today
+            </div>
+            <p class="sidebar__badge">2</p>
+         </div>
+         <div class="sidebar__main-item sidebar__item--this-week" data-value="thisWeek">
+            <div class="sidebar__item-description">
+               <img class="sidebar__item-img" src="./assets/images/calendar-week.svg" alt="calendar week icon">
+               This Week
+            </div>
+            <p class="sidebar__badge">1</p>
+         </div>
+      </div>
+    
+      <div class="sidebar__project-section">
+         <div class="sidebar__project">
+            <p class="sidebar__item--project">Projects</p>
+            <div class="sidebar__project-item sidebar__project-item--gym" data-value="gym">
+               <div class="sidebar__project-item-description">
+                  <img class="sidebar__project-item-img" src="./assets/images/list-task.svg" alt="task-list icon">
+                  Gym
+               </div>
+               <p class="sidebar__badge">2</p>
+            </div>
+            <div class="sidebar__project-item sidebar__project-item--study" data-value="study">
+               <div class="sidebar__project-item-description">
+                  <img class="sidebar__project-item-img" src="./assets/images/list-task.svg" alt="task-list icon">
+                  Study
+               </div>
+               <p class="sidebar__badge">1</p>
+            </div>
+            <div class="sidebar__project-item sidebar__project-item--work" data-value="work">
+               <div class="sidebar__project-item-description">
+                  <img class="sidebar__project-item-img" src="./assets/images/list-task.svg" alt="task-list icon">
+                  Work
+               </div>
+               <p class="sidebar__badge">1</p>
+            </div>
+         </div>
+         <div class="sidebar__add-project">
+            <img class="sidebar__add-project-item-img" src="./assets/images/plus.svg" alt="plus icon">
+            Add Project
+         </div>
+      </div>
+    </aside>    
+
+   <div class="main">
 
    </div>   
 
    <footer class="footer">
       <p class="footer__text">Copyright &copy; 
          <span class="footer__year"></span> 
-         <a href="https://github.com/AdjeteySowah/restaurant-page" target="_blank" rel="noopener noreferrer" class="footer__link">AdjeteySowah <img src="./assets/images/github.svg" alt="github icon" class="footer__image"></a>
+         <a class="footer__link" href="https://github.com/AdjeteySowah/restaurant-page" target="_blank" rel="noopener noreferrer" >AdjeteySowah <img class="footer__image" src="./assets/images/github.svg" alt="github icon"></a>
       </p>
    </footer>
 </body>
