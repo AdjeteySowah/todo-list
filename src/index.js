@@ -1,8 +1,8 @@
 
 import "./styles.css";
 
-import { logger } from "./modules/controller.js";
-// import { menuTab } from "./modules/menu.js";
-// import { contactTab } from "./modules/contact.js";
+import { initTabClickEvent } from "./modules/controller.js";
+import { renderInboxContent } from "./modules/ui.js";
 
-logger();
+initTabClickEvent();
+renderInboxContent();
