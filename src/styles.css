@@ -176,10 +176,16 @@ img {
 
 
    /* || Main */
-.main {
+.main-content {
    grid-area: mn;
+
+   margin: 3rem 10rem 0 10rem;
 }
 
+.main-content__title {
+   font-size: 3rem;
+   font-weight: 700;
+}
 
    /* || Footer */
 .footer {
