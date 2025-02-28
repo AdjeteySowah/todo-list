@@ -73,6 +73,7 @@ h1, h3 {
    --primary-gray: rgb(39, 39, 42);
    --secondary-gray: rgba(109, 109, 121, 0.2);
    --tertiary-gray: rgba(39, 39, 42, 0.1);
+   --faded-red: rgba(255, 0, 0, 0.25);
 }
 
 
@@ -150,6 +151,7 @@ img {
 .sidebar__project-item {
    display: flex;
    justify-content: space-between;
+   align-items: center;
 }
 
 .sidebar__badge {
@@ -185,7 +187,36 @@ img {
 .main-content__title {
    font-size: 3rem;
    font-weight: 700;
+   margin-bottom: 1rem;
+   padding-left: 1rem;
 }
+
+.main-content__action {
+   display: flex;
+   gap: 2rem;
+}
+
+.main-content__action--add-task,
+.main-content__action--delete-project {
+   flex: 1 1 auto;
+
+   margin-top: 1rem;
+   padding: 1rem;
+   border: 2px solid var(--black);
+   border-radius: 0.5rem;
+   text-align: center;
+}
+
+.main-content__action--add-task:hover {
+   cursor: pointer;
+   background-color: var(--secondary-gray);
+}
+
+.main-content__action--delete-project:hover {
+   cursor: pointer;
+   background-color: var(--faded-red);
+}
+
 
    /* || Footer */
 .footer {
