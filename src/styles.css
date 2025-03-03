@@ -74,6 +74,7 @@ h1, h3 {
    --secondary-gray: rgba(109, 109, 121, 0.2);
    --tertiary-gray: rgba(39, 39, 42, 0.1);
    --faded-red: rgba(255, 0, 0, 0.25);
+   --faded-green: rgba(0, 255, 0, 0.5);
 }
 
 
@@ -191,30 +192,46 @@ img {
    padding-left: 1rem;
 }
 
-.main-content__action {
+.main-content__action,
+.main-content__new-action {
    display: flex;
    gap: 2rem;
 }
 
 .main-content__action--add-task,
+.main-content__new-add,
+.main-content__new-cancel,
 .main-content__action--delete-project {
    flex: 1 1 auto;
 
    margin-top: 1rem;
    padding: 1rem;
-   border: 2px solid var(--black);
    border-radius: 0.5rem;
    text-align: center;
 }
 
-.main-content__action--add-task:hover {
-   cursor: pointer;
-   background-color: var(--secondary-gray);
+.main-content__action--add-task,
+.main-content__new-add {
+   background-color: var(--faded-green);
 }
 
+.main-content__new-cancel,
+.main-content__action--delete-project {
+   background-color: var(--faded-red);
+}
+
+.main-content__task-input {
+   width: 100%;
+   padding: 1rem;
+   border: 2px solid var(--black);
+   border-radius: 0.5rem;
+}
+
+.main-content__action--add-task:hover,
+.main-content__new-add:hover,
+.main-content__new-cancel:hover,
 .main-content__action--delete-project:hover {
    cursor: pointer;
-   background-color: var(--faded-red);
 }
 
 
