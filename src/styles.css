@@ -70,9 +70,11 @@ h1, h3 {
 :root {
    --white: rgb(255, 255, 255);
    --black: rgb(0, 0, 0);
+   /* --box-shadow-color: rgba(0, 0, 0, 0.5); */
+   --link-hover-color: rgba(255, 255, 255, 0.75);
    --primary-gray: rgb(39, 39, 42);
    --secondary-gray: rgba(109, 109, 121, 0.2);
-   --tertiary-gray: rgba(39, 39, 42, 0.1);
+   --tertiary-gray: rgba(39, 39, 42, 0.05);
    --faded-red: rgba(255, 0, 0, 0.25);
    --faded-green: rgba(0, 255, 0, 0.5);
 }
@@ -192,6 +194,36 @@ img {
    padding-left: 1rem;
 }
 
+.main-content__task {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   
+   padding: 1rem;
+   margin-bottom: 1rem;
+   border-radius: 0.5rem;
+   background-color: var(--tertiary-gray);
+}
+
+.main-content__task:hover {
+   transform: scale(1.01);
+   box-shadow: 5px 5px 5px 0 var(--secondary-gray);
+}
+
+.main-content__checkbox-label {
+   display: flex;
+   gap: 1rem;
+}
+
+.main-content__checkbox {
+   accent-color: var(--faded-green);
+}
+
+.main-content__task-actions {
+   display: flex;
+   gap: 2rem;
+}
+
 .main-content__action,
 .main-content__new-action {
    display: flex;
@@ -204,7 +236,8 @@ img {
 .main-content__action--delete-project {
    flex: 1 1 auto;
 
-   margin-top: 1rem;
+   font-weight: 500;
+   margin-top: 2rem;
    padding: 1rem;
    border-radius: 0.5rem;
    text-align: center;
@@ -256,6 +289,10 @@ img {
 .footer__link {
    text-decoration: none;
    color: var(--white);
+}
+
+.footer__link:hover {
+   color: var(--link-hover-color);
 }
 
 
