@@ -2,11 +2,11 @@
 import "./styles.css";
 
 import { initTabClickEvent, listenForAddTaskClick } from "./modules/controller.js";
-import { renderInboxContent } from "./modules/ui.js";
+import { renderTabContent } from "./modules/ui.js";
 
 function init() {
    initTabClickEvent();
-   renderInboxContent();
+   renderTabContent();
    listenForAddTaskClick();
 }
 
