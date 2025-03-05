@@ -210,6 +210,15 @@ img {
    box-shadow: 5px 5px 5px 0 var(--secondary-gray);
 }
 
+.main-content__checkbox-label > *:hover,
+.main-content__task-actions > *:hover {
+   cursor: pointer;
+}
+
+/* .main-content__task-due-date:hover {
+   cursor: default;
+} */
+
 .main-content__checkbox-label {
    display: flex;
    gap: 1rem;
@@ -299,4 +308,12 @@ img {
    /* || INTERACTIONS WITH DOM */
 .active {
    background-color: var(--secondary-gray);
+}
+
+.fade {
+   opacity: 0.5;
+}
+
+.strike-through {
+   text-decoration: line-through;
 }
