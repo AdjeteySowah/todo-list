@@ -1,5 +1,5 @@
 
-import { listenForAddTaskClick } from "./controller.js";
+import { listenForClicksInMain } from "./controller.js";
 import { tasks } from "./taskManager.js";
 
 import edit from "../assets/images/edit.svg";
@@ -29,6 +29,9 @@ export function renderTabContent() {
             div1.setAttribute("class", "main-content__tasks");
                let div11 = document.createElement("div");
                div11.setAttribute("class", "main-content__task");
+               if (tasks[index].completed === true) {
+                  div11.classList.add("fade", "strike-through");
+               }
                div11.setAttribute("data-index", `${index}`);
                   let div111 = document.createElement("div");
                   div111.setAttribute("class", "main-content__checkbox-label")
@@ -37,6 +40,9 @@ export function renderTabContent() {
                      checkbox1111.setAttribute("name", "completed");
                      checkbox1111.setAttribute("id", `completed-${index}`);
                      checkbox1111.setAttribute("class", "main-content__checkbox");
+                     if (tasks[index].completed === true) {
+                        checkbox1111.setAttribute("checked", "");
+                     }
                      let label1111 = document.createElement("label");
                      label1111.setAttribute("for", `completed-${index}`);
                      label1111.setAttribute("class", "main-content__label");
@@ -46,8 +52,7 @@ export function renderTabContent() {
                   let div112 = document.createElement("div");
                   div112.setAttribute("class", "main-content__task-actions");
                      let p1121 = document.createElement("p");
-                     p1121.setAttribute("class", "main-content__set-date");
-                     p1121.textContent = "set date";
+                     p1121.setAttribute("class", "main-content__task-due-date");
                      let img1121 = document.createElement("img");
                      img1121.setAttribute("src", edit);
                      img1121.setAttribute("alt", "edit icon");
@@ -87,7 +92,7 @@ export function renderTabContent() {
    mainContent.appendChild(div1);
    mainContent.appendChild(div2);
 
-   listenForAddTaskClick();
+   listenForClicksInMain();
 }
 
 export function renderInboxInput() {
@@ -115,4 +120,16 @@ export function renderInboxInput() {
    mainContent.appendChild(div);
 
    input.focus();
+}
+
+export function fadeAndStrikeThroughTask(event) {
+   let selectedElement = event.target.closest(".main-content__task");
+   let taskIndex = event.target.closest(".main-content__task").getAttribute("data-index");
+   if (selectedElement) {
+      if (tasks[taskIndex].completed === false) {
+         selectedElement.classList.add("fade", "strike-through");
+      } else {
+         selectedElement.classList.remove("fade", "strike-through");
+      }
+   }
 }
