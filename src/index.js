@@ -1,11 +1,11 @@
 
 import "./styles.css";
 
-import { initTabClickEvent, listenForClicksInMain } from "./modules/controller.js";
+import { listenForClicksInSidebar, listenForClicksInMain } from "./modules/controller.js";
 import { renderTabContent } from "./modules/ui.js";
 
 function init() {
-   initTabClickEvent();
+   listenForClicksInSidebar();
    renderTabContent();
    listenForClicksInMain();
 }
