@@ -4,6 +4,7 @@ import { tasks } from "./taskManager.js";
 
 import edit from "../assets/images/edit.svg";
 import deleteIcon from "../assets/images/delete.svg";
+import listTask from "../assets/images/list-task.svg";
 
 export function setActiveTab(selectedTab) {
    let sidebarTabs = document.querySelectorAll(".sidebar__item");
@@ -11,6 +12,28 @@ export function setActiveTab(selectedTab) {
       tab.classList.remove("active");
       selectedTab.classList.add("active");
    });
+}
+
+   // display newly added projects in the sidebar
+function renderProjectTab() {
+   let projectsSection = document.querySelector(".sidebar__project");
+      let sidebarItem = document.createElement("div");
+      sidebarItem.setAttribute("class", "sidebar__item sidebar__project-item sidebar__item--gym");
+      sidebarItem.setAttribute("data-value", "gym");
+         let descriptionDiv = document.createElement("div");
+         descriptionDiv.setAttribute("class", "sidebar__item-description");
+            let img = document.createElement("img");
+            img.setAttribute("class", "sidebar__item-img");
+            img.setAttribute("src", listTask);
+            img.setAttribute("alt", "task-list icon");
+            let gymText = document.createTextNode("Gym");
+         descriptionDiv.appendChild(img);
+         descriptionDiv.appendChild(gymText);
+         let badge = document.createElement("p");
+         badge.setAttribute("class", "sidebar__badge");
+      sidebarItem.appendChild(descriptionDiv);
+      sidebarItem.appendChild(badge);
+   projectsSection.appendChild(sidebarItem);
 }
 
 export function renderTabContent() {
@@ -73,7 +96,7 @@ export function renderTabContent() {
          // actions
          let div2 = document.createElement("div");
       if (activeTab.firstElementChild.textContent.trim() === "Inbox") {
-         div2.setAttribute("class", "main-content__action--add-task");
+         div2.setAttribute("class", "main-content__action--add-task show-input");
          div2.textContent = "Add Task";
       } else if (activeTab.firstElementChild.classList.contains("sidebar__item-description")) {
          div2.setAttribute("class", "main-content__action");
@@ -95,29 +118,42 @@ export function renderTabContent() {
    listenForClicksInMain();
 }
 
-export function renderInboxInput() {
+export function renderInput(selectedElement) {
    let mainContent = document.querySelector(".main-content");
    let mainContLastChild = document.querySelector(".main-content__action--add-task");
-   mainContent.removeChild(mainContLastChild);
+   let projectSection = document.querySelector(".sidebar__project-section");
+   let projectSectionLastChild = document.querySelector(".sidebar__add-project");
+
+   if (selectedElement.parentElement.firstElementChild.textContent.trim() === "Inbox") {
+      mainContent.removeChild(mainContLastChild);
+   } else {
+      projectSection.removeChild(projectSectionLastChild);
+   }
+   
       let div = document.createElement("div");
-      div.setAttribute("class", "main-content__input-action");
+      div.setAttribute("class", "input-action");
          let input = document.createElement("input");
          input.setAttribute("type", "text");
          input.setAttribute("maxlength", "50");
-         input.setAttribute("class", "main-content__task-input");
+         input.setAttribute("class", "input");
          let div1 = document.createElement("div");
-         div1.setAttribute("class", "main-content__new-action")
+         div1.setAttribute("class", "new-action")
             let div11 = document.createElement("div");
-            div11.setAttribute("class", "main-content__new-add");
+            div11.setAttribute("class", "new-add");
             div11.textContent = "Add";
             let div12 = document.createElement("div");
-            div12.setAttribute("class", "main-content__new-cancel");
+            div12.setAttribute("class", "new-cancel");
             div12.textContent = "Cancel";
          div1.appendChild(div11);
          div1.appendChild(div12);
       div.appendChild(input);
       div.appendChild(div1);
-   mainContent.appendChild(div);
+
+   if (selectedElement.classList.contains("main-content__action--add-task")) {
+      mainContent.appendChild(div);
+   } else {
+      projectSection.appendChild(div);
+   }
 
    input.focus();
 }
@@ -132,4 +168,17 @@ export function fadeAndStrikeThroughTask(event) {
          selectedElement.classList.remove("fade", "strike-through");
       }
    }
+}
+
+export function viewAndEditTaskDetails() {
+   let dialog = document.querySelector(".dialog");
+   let body = document.querySelector("body");
+
+   if (dialog.classList.contains("closing")) {
+      dialog.classList.remove("closing");
+   }
+   dialog.showModal();
+   body.classList.add("blurred");
+      // overemphasizing that the dialog should not be blurred
+   dialog.style.filter = "none";
 }
