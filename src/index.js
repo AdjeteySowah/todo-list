@@ -11,3 +11,12 @@ function init() {
 }
 
 init();
+
+
+let projectContainer = document.querySelector(".sidebar__projects-container");
+
+let observer = new MutationObserver(() => {
+  projectContainer.scrollTop = projectContainer.scrollHeight;
+});
+
+observer.observe(projectContainer, { childList: true });
