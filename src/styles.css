@@ -70,13 +70,13 @@ h1, h3 {
 :root {
    --white: rgb(255, 255, 255);
    --black: rgb(0, 0, 0);
-   /* --box-shadow-color: rgba(0, 0, 0, 0.5); */
    --link-hover-color: rgba(255, 255, 255, 0.75);
    --primary-gray: rgb(39, 39, 42);
    --secondary-gray: rgba(109, 109, 121, 0.2);
    --tertiary-gray: rgba(39, 39, 42, 0.05);
    --faded-red: rgba(255, 0, 0, 0.25);
    --faded-green: rgba(0, 255, 0, 0.5);
+   --scrollbar-thumb-color: rgba(0, 0, 0, 0.5);
 }
 
 
@@ -130,10 +130,16 @@ img {
 
    background-color: var(--tertiary-gray);
    padding: 2rem;
+   padding-right: 0;
 
    display: flex;
    flex-direction: column;
    gap: 3rem;
+}
+
+.sidebar__main-section,
+.sidebar .input-action {
+   padding-right: 2rem;
 }
 
 .sidebar__main-item,
@@ -157,6 +163,20 @@ img {
    align-items: center;
 }
 
+.sidebar__item--project {
+   font-weight: 500;
+   font-size: 2.5rem;
+   margin-bottom: 2rem;
+   padding-left: 1rem;
+}
+
+.sidebar__projects-container {
+   max-height: 10.6rem;                           /* Creates little space for scrolled content, making you wanna scroll */
+   overflow-y: auto;
+   padding-right: 1.6rem;                         /* The scrollbar width is 0.4rem */
+   scrollbar-gutter: stable;
+}
+
 .sidebar__badge {
    background-color: var(--primary-gray);
    color: var(--white);
@@ -168,11 +188,17 @@ img {
    align-items: center;
 }
 
-.sidebar__item--project {
-   font-weight: 500;
-   font-size: 2.5rem;
-   margin-bottom: 2rem;
-   padding-left: 1rem;
+.sidebar__projects-container::-webkit-scrollbar {
+   width: 0.4rem;
+}
+
+.sidebar__projects-container::-webkit-scrollbar-thumb {
+   background: var(--scrollbar-thumb-color);
+   border-radius: 0.4rem;
+}
+
+.sidebar__projects-container::-webkit-scrollbar-thumb:hover {
+   background: var(--black);
 }
 
 .sidebar__add-project {
@@ -265,6 +291,7 @@ img {
 .input {
    width: 100%;
    padding: 1rem;
+   margin-top: 1rem;
    border: 2px solid var(--black);
    border-radius: 0.5rem;
 }
