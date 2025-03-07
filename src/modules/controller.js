@@ -1,7 +1,9 @@
 
-import { setActiveTab, renderTabContent, renderInboxInput, fadeAndStrikeThroughTask } from "./ui.js";
+import { setActiveTab, renderProjectTab, renderTabContent, renderInput, fadeAndStrikeThroughTask, viewAndEditTaskDetails } from "./ui.js";
 import { addTaskToArray, removeTaskFromArray, updateTaskStatus } from "./taskManager.js";
+import { createProject } from "./project.js";
 
+      // SIDEBAR EVENTS
 function handleTabClick(event) {
    let selectedTab = event.target.closest(".sidebar__item");
    if (selectedTab) {
@@ -10,20 +12,36 @@ function handleTabClick(event) {
    }
 }
 
-export function initTabClickEvent() {
-   let sidebar = document.querySelector(".sidebar");
-   sidebar.addEventListener("click", handleTabClick);
-}
-
-function handleInboxAddTaskClick(event) {
-   let selectedElement = event.target.closest(".main-content__action--add-task");
-   if (selectedElement && selectedElement.parentElement.firstElementChild.textContent.trim() === "Inbox") {
-      renderInboxInput();
+function handleSbAddClick(event) {
+   let selectedElement = event.target.classList.contains("new-add");
+   if (selectedElement) {
+      createProject();
+      renderProjectTab();
    }
 }
 
+function handleClicksInSidebar(event) {
+   handleTabClick(event);
+   handleAddTaskClick(event);
+   handleSbAddClick(event);
+}
+
+export function listenForClicksInSidebar() {
+   let sidebar = document.querySelector(".sidebar");
+   sidebar.addEventListener("click", handleClicksInSidebar);
+}
+
+      // MAIN CONTENT EVENTS
+   // Add project needs this same functionality
 function handleAddTaskClick(event) {
-   let selectedElement = event.target.classList.contains("main-content__new-add");
+   let selectedElement = event.target.closest(".show-input");
+   if (selectedElement) {
+      renderInput(selectedElement);
+   }
+}
+
+function handleAddClick(event) {
+   let selectedElement = event.target.classList.contains("new-add");
    if (selectedElement) {
       addTaskToArray();
       renderTabContent();
@@ -46,11 +64,19 @@ function handleTaskCompletionStatusClick(event) {
    }
 }
 
+function handleTaskEditClick(event) {
+   let selectedElement = event.target.classList.contains("main-content__task-edit");
+   if (selectedElement) {
+      viewAndEditTaskDetails(event);
+   }
+}
+
 function handleClicksInMain(event) {
-   handleInboxAddTaskClick(event);
    handleAddTaskClick(event);
+   handleAddClick(event);
    handleRemoveTaskClick(event);
    handleTaskCompletionStatusClick(event);
+   handleTaskEditClick(event);
 }
 
 export function listenForClicksInMain() {
