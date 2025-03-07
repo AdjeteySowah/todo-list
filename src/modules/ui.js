@@ -15,25 +15,28 @@ export function setActiveTab(selectedTab) {
 }
 
    // display newly added projects in the sidebar
-function renderProjectTab() {
-   let projectsSection = document.querySelector(".sidebar__project");
-      let sidebarItem = document.createElement("div");
-      sidebarItem.setAttribute("class", "sidebar__item sidebar__project-item sidebar__item--gym");
-      sidebarItem.setAttribute("data-value", "gym");
+export function renderProjectTab() {
+   let sidebar = document.querySelector(".sidebar");
+   let taskInputValue = sidebar.querySelector(".input").value.trim();
+   let formattedTaskInputValue = ` ${taskInputValue[0].toUpperCase()}${taskInputValue.slice(1)}`
+   let projectsContainer = document.querySelector(".sidebar__projects-container");
+      let project = document.createElement("div");
+      project.setAttribute("class", "sidebar__item sidebar__project-item");
          let descriptionDiv = document.createElement("div");
          descriptionDiv.setAttribute("class", "sidebar__item-description");
             let img = document.createElement("img");
             img.setAttribute("class", "sidebar__item-img");
             img.setAttribute("src", listTask);
             img.setAttribute("alt", "task-list icon");
-            let gymText = document.createTextNode("Gym");
+            let textNode = document.createTextNode(formattedTaskInputValue);
          descriptionDiv.appendChild(img);
-         descriptionDiv.appendChild(gymText);
+         descriptionDiv.appendChild(textNode);
          let badge = document.createElement("p");
          badge.setAttribute("class", "sidebar__badge");
-      sidebarItem.appendChild(descriptionDiv);
-      sidebarItem.appendChild(badge);
-   projectsSection.appendChild(sidebarItem);
+      project.appendChild(descriptionDiv);
+      project.appendChild(badge);
+      // let addProjectTab = 
+   projectsContainer.appendChild(project);
 }
 
 export function renderTabContent() {
@@ -43,7 +46,9 @@ export function renderTabContent() {
          // title
       let h2 = document.createElement("h2");
       h2.setAttribute("class", "main-content__title");
-      h2.textContent = activeTab.firstElementChild.textContent;
+      let trimmedTitle = activeTab.firstElementChild.textContent.trim();
+      let formattedTitle = `${trimmedTitle[0].toUpperCase()}${trimmedTitle.slice(1)}`;
+      h2.textContent = formattedTitle;
 
          // tasks
          let div1 = document.createElement("div");
