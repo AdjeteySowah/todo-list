@@ -1,5 +1,5 @@
 
-import { setActiveTab, renderProjectTab, renderTabContent, renderInput, fadeAndStrikeThroughTask, viewAndEditTaskDetails } from "./ui.js";
+import { setActiveTab, renderProjectSection, renderTabContent, renderInput, fadeAndStrikeThroughTask, viewAndEditTaskDetails } from "./ui.js";
 import { addTaskToArray, removeTaskFromArray, updateTaskStatus } from "./taskManager.js";
 import { createProject } from "./project.js";
 
@@ -16,7 +16,7 @@ function handleSbAddClick(event) {
    let selectedElement = event.target.classList.contains("new-add");
    if (selectedElement) {
       createProject();
-      renderProjectTab();
+      renderProjectSection();
    }
 }
 
@@ -32,11 +32,12 @@ export function listenForClicksInSidebar() {
 }
 
       // MAIN CONTENT EVENTS
-   // Add project needs this same functionality
+   // Add project(in sidebar) needs this same functionality
 function handleAddTaskClick(event) {
    let selectedElement = event.target.closest(".show-input");
    if (selectedElement) {
       renderInput(selectedElement);
+      scrollDown();
    }
 }
 
@@ -82,4 +83,15 @@ function handleClicksInMain(event) {
 export function listenForClicksInMain() {
    let mainContent = document.querySelector(".main-content");
    mainContent.addEventListener("click", handleClicksInMain);
+}
+
+
+function scrollDown() {
+   let sidebar = document.querySelector(".sidebar");
+ 
+      // In handleAddTaskClick, input is rendered before scrollDown is called. Using setTimeout is just to overemphasize
+   setTimeout(() => {
+      sidebar.scrollTo({ top: sidebar.scrollHeight, behavior: "smooth" });
+   }, 0);
+    
 }
