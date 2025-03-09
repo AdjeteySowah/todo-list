@@ -5,6 +5,7 @@ import { tasks } from "./taskManager.js";
 import edit from "../assets/images/edit.svg";
 import deleteIcon from "../assets/images/delete.svg";
 import listTask from "../assets/images/list-task.svg";
+import plus from "../assets/images/plus.svg";
 
 export function setActiveTab(selectedTab) {
    let sidebarTabs = document.querySelectorAll(".sidebar__item");
@@ -15,28 +16,43 @@ export function setActiveTab(selectedTab) {
 }
 
    // display newly added projects in the sidebar
-export function renderProjectTab() {
+export function renderProjectSection() {
    let sidebar = document.querySelector(".sidebar");
    let taskInputValue = sidebar.querySelector(".input").value.trim();
-   let formattedTaskInputValue = ` ${taskInputValue[0].toUpperCase()}${taskInputValue.slice(1)}`
-   let projectsContainer = document.querySelector(".sidebar__projects-container");
-      let project = document.createElement("div");
-      project.setAttribute("class", "sidebar__item sidebar__project-item");
-         let descriptionDiv = document.createElement("div");
-         descriptionDiv.setAttribute("class", "sidebar__item-description");
-            let img = document.createElement("img");
-            img.setAttribute("class", "sidebar__item-img");
-            img.setAttribute("src", listTask);
-            img.setAttribute("alt", "task-list icon");
-            let textNode = document.createTextNode(formattedTaskInputValue);
-         descriptionDiv.appendChild(img);
-         descriptionDiv.appendChild(textNode);
-         let badge = document.createElement("p");
-         badge.setAttribute("class", "sidebar__badge");
-      project.appendChild(descriptionDiv);
-      project.appendChild(badge);
-      // let addProjectTab = 
-   projectsContainer.appendChild(project);
+   let formattedTaskInputValue = ` ${taskInputValue[0].toUpperCase()}${taskInputValue.slice(1)}`;
+
+   let projectSection = document.querySelector(".sidebar__project-section");
+   let projectSectionLastChild = sidebar.querySelector(".input-action");
+      let projectsContainer = document.querySelector(".sidebar__projects-container");
+         let project = document.createElement("div");
+         project.setAttribute("class", "sidebar__item sidebar__project-item");
+            let descriptionDiv = document.createElement("div");
+            descriptionDiv.setAttribute("class", "sidebar__item-description");
+               let img1 = document.createElement("img");
+               img1.setAttribute("class", "sidebar__item-img");
+               img1.setAttribute("src", listTask);
+               img1.setAttribute("alt", "task-list icon");
+               let textNode1 = document.createTextNode(formattedTaskInputValue);
+            descriptionDiv.appendChild(img1);
+            descriptionDiv.appendChild(textNode1);
+            let badge = document.createElement("p");
+            badge.setAttribute("class", "sidebar__badge");
+         project.appendChild(descriptionDiv);
+         project.appendChild(badge);
+      projectsContainer.appendChild(project);
+      
+      let addProjectTab = document.createElement("div");
+      addProjectTab.setAttribute("class", "sidebar__add-project show-input");
+         let img2 = document.createElement("img");
+         img2.setAttribute("class", "sidebar__item-img");
+         img2.setAttribute("src", plus);
+         img2.setAttribute("alt", "plus icon");
+         let textNode2 = document.createTextNode(" Add Project");
+      addProjectTab.appendChild(img2);
+      addProjectTab.appendChild(textNode2);
+
+   projectSection.removeChild(projectSectionLastChild);
+   projectSection.appendChild(addProjectTab);
 }
 
 export function renderTabContent() {
