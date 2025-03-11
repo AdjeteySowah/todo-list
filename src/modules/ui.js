@@ -1,6 +1,6 @@
 
 import { listenForClicksInMain } from "./controller.js";
-import { tasks } from "./taskManager.js";
+import { inboxTasks } from "./taskManager.js";
 
 import edit from "../assets/images/edit.svg";
 import deleteIcon from "../assets/images/delete.svg";
@@ -69,11 +69,11 @@ export function renderTabContent() {
          // tasks
          let div1 = document.createElement("div");
       if (activeTab.firstElementChild.textContent.trim() === "Inbox") {
-         tasks.forEach((task, index) => {
+         inboxTasks.forEach((task, index) => {
             div1.setAttribute("class", "main-content__tasks");
                let div11 = document.createElement("div");
                div11.setAttribute("class", "main-content__task");
-               if (tasks[index].completed === true) {
+               if (inboxTasks[index].completed === true) {
                   div11.classList.add("fade", "strike-through");
                }
                div11.setAttribute("data-index", `${index}`);
@@ -84,7 +84,7 @@ export function renderTabContent() {
                      checkbox1111.setAttribute("name", "completed");
                      checkbox1111.setAttribute("id", `completed-${index}`);
                      checkbox1111.setAttribute("class", "main-content__checkbox");
-                     if (tasks[index].completed === true) {
+                     if (inboxTasks[index].completed === true) {
                         checkbox1111.setAttribute("checked", "");
                      }
                      let label1111 = document.createElement("label");
@@ -183,7 +183,7 @@ export function fadeAndStrikeThroughTask(event) {
    let selectedElement = event.target.closest(".main-content__task");
    let taskIndex = event.target.closest(".main-content__task").getAttribute("data-index");
    if (selectedElement) {
-      if (tasks[taskIndex].completed === false) {
+      if (inboxTasks[taskIndex].completed === false) {
          selectedElement.classList.add("fade", "strike-through");
       } else {
          selectedElement.classList.remove("fade", "strike-through");
@@ -191,7 +191,7 @@ export function fadeAndStrikeThroughTask(event) {
    }
 }
 
-export function viewAndEditTaskDetails() {
+export function showModal() {
    let dialog = document.querySelector(".dialog");
    let body = document.querySelector("body");
 
@@ -202,4 +202,21 @@ export function viewAndEditTaskDetails() {
    body.classList.add("blurred");
       // overemphasizing that the dialog should not be blurred
    dialog.style.filter = "none";
+}
+
+export function slideupModal() {
+   let body = document.querySelector("body");
+   let dialog = document.querySelector(".dialog");
+   let form = document.querySelector(".dialog__form");
+
+   dialog.classList.add("closing");
+      // This ensures the animation completes before calling the close method on the dialog
+   dialog.addEventListener("animationend", () => {
+   if (dialog.classList.contains("closing")) {
+      dialog.close();
+      }
+   }, {once: true});
+
+   body.classList.remove("blurred");
+   form.reset();
 }
