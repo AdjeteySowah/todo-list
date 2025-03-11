@@ -309,6 +309,117 @@ img {
 }
 
 
+   /* || DIALOG/MODAL */
+.dialog {
+   margin: auto;
+   padding: 3rem;
+   border: none;
+   width: 45%;
+
+   position: fixed;
+   top: -100%;
+   opacity: 0;
+   animation: none;
+}
+
+.dialog[open] {
+   animation: drop-down 0.5s ease forwards;
+}
+
+.dialog.closing {
+   animation: slide-up 0.5s ease forwards;
+}
+
+@keyframes drop-down {
+   0% {
+      top: -200%;
+      opacity: 0;
+   }
+   70% {
+      top: 20%;
+      opacity: 0.8;
+   }
+   100% {
+      top: 0;
+      opacity: 1;
+   }
+}
+   
+   @keyframes slide-up {
+   0% {
+      top: 0;
+      opacity: 1;
+   }
+   100% {
+      top: -200%;
+      opacity: 0;
+   }
+}
+
+.dialog::backdrop {
+   background-color: var(--scrollbar-thumb-color);
+}
+
+.dialog__form-inputs {
+   display: flex;
+   flex-direction: column;
+   gap: 2rem;
+
+   padding: 2rem;
+   margin-bottom: 2rem;
+   background-color: var(--tertiary-gray);
+   border-radius: 1rem;
+   box-shadow: 0 3px 5px 2px var(--scrollbar-thumb-color);
+}
+
+.dialog__form-inputs :is(label, input, textarea, select) {
+   letter-spacing: 2px;
+}
+
+.dialog__form-inputs :is(input, textarea, select) {
+   width: 100%;
+   border-radius: 0.25rem;
+   border: 1px solid var(--scrollbar-thumb-color);
+   padding: 0.25rem 1rem;
+   font-size: 1.4rem;
+}
+
+.dialog__form-inputs textarea {
+   font-family: "Ubuntu", system-ui, serif;
+   resize: vertical;
+   min-height: 5rem;
+   max-height: 10rem;
+}
+
+.dialog__form-inputs input:focus {
+   border: none;
+   outline: 2px solid var(--primary-gray);
+}
+
+.dialog__form-actions {
+   display: flex;
+   gap: 2rem;
+}
+
+.dialog__form-actions button {
+   padding: 0.5rem 2rem;
+   border: none;
+   border-radius: 0.5rem;
+   background-color: var(--faded-green);
+   color: var(--black);
+   font-weight: 500;
+}
+
+.dialog__form-actions button:nth-child(2) {
+   background-color: var(--faded-red);
+}
+
+.dialog__form-actions button:hover {
+   cursor: pointer;
+   transform: scale(1.1);
+}
+
+
    /* || INTERACTIONS WITH DOM */
 .active {
    background-color: var(--secondary-gray);
@@ -320,4 +431,8 @@ img {
 
 .strike-through {
    text-decoration: line-through;
+}
+
+.blurred {
+   filter: blur(3px);
 }
