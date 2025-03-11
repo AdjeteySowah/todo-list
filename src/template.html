@@ -70,6 +70,13 @@
       
    </div>
 
+   <footer class="footer">
+      <p class="footer__text">Copyright &copy; 
+         <span class="footer__year"></span> 
+         <a class="footer__link" href="https://github.com/AdjeteySowah/todo-list" target="_blank" rel="noopener noreferrer" >AdjeteySowah <img class="footer__image" src="./assets/images/github.svg" alt="github icon"></a>
+      </p>
+   </footer>
+
    <dialog class="dialog">
       <form class="dialog__form" method="dialog">
          <div class="dialog__form-inputs">
@@ -79,7 +86,7 @@
             </div>
             <div class="dialog__form-input dialog__form-input--description">
                <label for="desciption">Desciption</label>
-               <input type="text" id="desciption" name="desciption" maxlength="50" placeholder="Eg. Write a well-structured essay, demonstrating your understanding of Love">
+               <textarea id="desciption" name="desciption" maxlength="50" rows="4" placeholder="Eg. Write a well-structured essay, demonstrating your understanding of Love"></textarea>
             </div>
             <div class="dialog__form-input dialog__form-input--due-date">
                <label for="due-date">Due Date</label>
@@ -89,8 +96,8 @@
                <label for="priority">Priority</label>
                <select name="priority" id="priority">
                   <option value="low">Low</option>
-                  <option value="medium">Medium</option>
-                  <option value="high" selected>High</option>
+                  <option value="medium" selected>Medium</option>
+                  <option value="high">High</option>
                </select>
             </div>
          </div>
@@ -100,12 +107,5 @@
          </div>
       </form>
    </dialog>
-
-   <footer class="footer">
-      <p class="footer__text">Copyright &copy; 
-         <span class="footer__year"></span> 
-         <a class="footer__link" href="https://github.com/AdjeteySowah/todo-list" target="_blank" rel="noopener noreferrer" >AdjeteySowah <img class="footer__image" src="./assets/images/github.svg" alt="github icon"></a>
-      </p>
-   </footer>
 </body>
 </html>
