@@ -1,6 +1,6 @@
 
-import { setActiveTab, renderProjectSection, renderTabContent, renderInput, fadeAndStrikeThroughTask, showModal, slideupModal } from "./ui.js";
-import { addTaskToArray, removeTaskFromArray, updateTaskStatus } from "./taskManager.js";
+import { setActiveTab, renderProjectSection, renderTabContent, renderInput, fadeAndStrikeThroughTask, showModal, slideupModal, closeModal } from "./ui.js";
+import { addTaskToArray, removeTaskFromArray, updateTaskStatus, updateTaskDetails } from "./taskManager.js";
 import { createProject } from "./project.js";
 
 
@@ -45,10 +45,14 @@ function scrollDown() {
       // MAIN CONTENT EVENTS
    // Add project(in sidebar) needs this same functionality
 function handleAddTaskClick(event) {
-   let selectedElement = event.target.closest(".show-input");
-   if (selectedElement) {
-      renderInput(selectedElement);
+   let selectedElementInInbox = event.target.closest(".show-input");
+   let selectedElement = event.target.closest(".main-content__action--add-task");
+   if (selectedElementInInbox) {
+      renderInput(selectedElementInInbox);
       scrollDown();
+   } else if (selectedElement) {
+      changeModalActions(event);
+      showModal();
    }
 }
 
@@ -79,7 +83,8 @@ function handleTaskCompletionStatusClick(event) {
 function handleTaskEditClick(event) {
    let selectedElement = event.target.classList.contains("main-content__task-edit");
    if (selectedElement) {
-      showModal(event);
+      changeModalActions(event);
+      showModal();
    }
 }
 
@@ -98,11 +103,64 @@ export function listenForClicksInMain() {
 
 
       // MODAL EVENTS
-function handleClicksInModal(event) {
+function handleModalCancelClick(event) {
    let selectedElement = event.target.classList.contains("dialog__form-action--cancel");
    if (selectedElement) {
       slideupModal();
    }
+}
+
+function handleModalAddClick(event) {
+   let selectedElement = event.target.classList.contains("dialog__form-action--add");
+   if (selectedElement) {
+      addTaskToArray();
+      closeModal();
+      renderTabContent();
+   }
+}
+
+function handleModalConfirmEditClick(event) {
+   let selectedElement = event.target.classList.contains("dialog__form-action--confirm-edit");
+   if (selectedElement) {
+      updateTaskDetails(selectedElement);
+   }
+}
+
+function changeModalActions(event) {
+   let dialog = document.querySelector(".dialog");
+   let formBtnsContainer = dialog.querySelector(".dialog__form-actions");
+
+   if (formBtnsContainer.children[0].textContent === "Confirm Edit" && event.target.classList.contains("main-content__action--add-task")) {
+      let confirmEditBtn = formBtnsContainer.children[0];
+      let cancelBtn = formBtnsContainer.children[1];
+
+      let addBtn = document.createElement("button");
+      addBtn.setAttribute("class", "dialog__form-action--add");
+      addBtn.setAttribute("type", "button");
+      addBtn.setAttribute("value", "add");
+      addBtn.textContent = "Add";
+
+      formBtnsContainer.removeChild(confirmEditBtn);
+      formBtnsContainer.insertBefore(addBtn, cancelBtn);
+   } else if (formBtnsContainer.children[0].textContent === "Add" && event.target.classList.contains("main-content__task-edit")) {
+      let addBtn = formBtnsContainer.children[0];
+      let cancelBtn = formBtnsContainer.children[1];
+
+      let confirmEditBtn = document.createElement("button");
+      confirmEditBtn.setAttribute("class", "dialog__form-action--confirm-edit");
+      confirmEditBtn.setAttribute("type", "button");
+      confirmEditBtn.setAttribute("value", "confirm-edit");
+      confirmEditBtn.textContent = "Confirm Edit";
+
+      formBtnsContainer.removeChild(addBtn);
+      formBtnsContainer.insertBefore(confirmEditBtn, cancelBtn);
+   }
+}
+
+function handleClicksInModal(event) {
+   handleModalAddClick(event);
+   handleModalCancelClick(event);
+   handleModalConfirmEditClick(event);
 }
 
 export function listenForClicksInModal() {
