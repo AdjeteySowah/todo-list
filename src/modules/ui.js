@@ -1,6 +1,7 @@
 
 import { listenForClicksInMain } from "./controller.js";
 import { inboxTasks } from "./taskManager.js";
+import { projects } from "./project.js";
 
 import edit from "../assets/images/edit.svg";
 import deleteIcon from "../assets/images/delete.svg";
@@ -53,6 +54,70 @@ export function renderProjectSection() {
 
    projectSection.removeChild(projectSectionLastChild);
    projectSection.appendChild(addProjectTab);
+
+   let selectedTab = project;
+   setActiveTab(selectedTab);
+   renderTabContent();
+}
+
+function createTasksElement(taskArray) {
+   let div1 = document.createElement("div");
+   div1.setAttribute("class", "main-content__tasks");
+
+   taskArray.forEach((task, index) => {
+      let div11 = document.createElement("div");
+      div11.setAttribute("class", "main-content__task");
+      if (task.completed) {
+         div11.classList.add("fade", "strike-through");
+      }
+      div11.setAttribute("data-index", `${index}`);
+
+      let div111 = document.createElement("div");
+      div111.setAttribute("class", "main-content__checkbox-label");
+
+      let checkbox1111 = document.createElement("input");
+      checkbox1111.setAttribute("type", "checkbox");
+      checkbox1111.setAttribute("name", "completed");
+      checkbox1111.setAttribute("id", `completed-${index}`);
+      checkbox1111.setAttribute("class", "main-content__checkbox");
+      if (task.completed) {
+         checkbox1111.setAttribute("checked", "");
+      }
+
+      let label1111 = document.createElement("label");
+      label1111.setAttribute("for", `completed-${index}`);
+      label1111.setAttribute("class", "main-content__label");
+      label1111.textContent = task.title;
+
+      div111.appendChild(checkbox1111);
+      div111.appendChild(label1111);
+
+      let div112 = document.createElement("div");
+      div112.setAttribute("class", "main-content__task-actions");
+
+      let p1121 = document.createElement("p");
+      p1121.setAttribute("class", "main-content__task-due-date");
+
+      let img1121 = document.createElement("img");
+      img1121.setAttribute("src", edit);
+      img1121.setAttribute("alt", "edit icon");
+      img1121.setAttribute("class", "main-content__task-edit");
+
+      let img1122 = document.createElement("img");
+      img1122.setAttribute("src", deleteIcon);
+      img1122.setAttribute("alt", "delete icon");
+      img1122.setAttribute("class", "main-content__task-delete");
+
+      div112.appendChild(p1121);
+      div112.appendChild(img1121);
+      div112.appendChild(img1122);
+
+      div11.appendChild(div111);
+      div11.appendChild(div112);
+      div1.appendChild(div11);
+   });
+
+   return div1;
 }
 
 export function renderTabContent() {
@@ -67,51 +132,16 @@ export function renderTabContent() {
       h2.textContent = formattedTitle;
 
          // tasks
-         let div1 = document.createElement("div");
+      let tasksContainer;
       if (activeTab.firstElementChild.textContent.trim() === "Inbox") {
-         inboxTasks.forEach((task, index) => {
-            div1.setAttribute("class", "main-content__tasks");
-               let div11 = document.createElement("div");
-               div11.setAttribute("class", "main-content__task");
-               if (inboxTasks[index].completed === true) {
-                  div11.classList.add("fade", "strike-through");
-               }
-               div11.setAttribute("data-index", `${index}`);
-                  let div111 = document.createElement("div");
-                  div111.setAttribute("class", "main-content__checkbox-label")
-                     let checkbox1111 = document.createElement("input");
-                     checkbox1111.setAttribute("type", "checkbox");
-                     checkbox1111.setAttribute("name", "completed");
-                     checkbox1111.setAttribute("id", `completed-${index}`);
-                     checkbox1111.setAttribute("class", "main-content__checkbox");
-                     if (inboxTasks[index].completed === true) {
-                        checkbox1111.setAttribute("checked", "");
-                     }
-                     let label1111 = document.createElement("label");
-                     label1111.setAttribute("for", `completed-${index}`);
-                     label1111.setAttribute("class", "main-content__label");
-                     label1111.textContent = task.title;
-                  div111.appendChild(checkbox1111);
-                  div111.appendChild(label1111);
-                  let div112 = document.createElement("div");
-                  div112.setAttribute("class", "main-content__task-actions");
-                     let p1121 = document.createElement("p");
-                     p1121.setAttribute("class", "main-content__task-due-date");
-                     let img1121 = document.createElement("img");
-                     img1121.setAttribute("src", edit);
-                     img1121.setAttribute("alt", "edit icon");
-                     img1121.setAttribute("class", "main-content__task-edit");
-                     let img1122 = document.createElement("img");
-                     img1122.setAttribute("src", deleteIcon);
-                     img1122.setAttribute("alt", "delete icon");
-                     img1122.setAttribute("class", "main-content__task-delete");
-                  div112.appendChild(p1121);
-                  div112.appendChild(img1121);
-                  div112.appendChild(img1122);
-               div11.appendChild(div111);
-               div11.appendChild(div112);
-            div1.appendChild(div11);
-         });
+         tasksContainer = createTasksElement(inboxTasks);
+      } else if (activeTab.classList.contains("sidebar__project-item")) {
+         // tasksContainer = createTasksElement(anotherArray);
+         for (let key in projects) {
+            if (key === activeTab.firstElementChild.textContent.trim()) {
+               tasksContainer = createTasksElement(projects[key]);
+            }
+         }
       }
 
          // actions
@@ -119,7 +149,7 @@ export function renderTabContent() {
       if (activeTab.firstElementChild.textContent.trim() === "Inbox") {
          div2.setAttribute("class", "main-content__action--add-task show-input");
          div2.textContent = "Add Task";
-      } else if (activeTab.firstElementChild.classList.contains("sidebar__item-description")) {
+      } else if (activeTab.classList.contains("sidebar__project-item")) {
          div2.setAttribute("class", "main-content__action");
             let div21 = document.createElement("div");
             div21.setAttribute("class", "main-content__action--add-task");
@@ -133,7 +163,7 @@ export function renderTabContent() {
       }
 
    mainContent.appendChild(h2);
-   mainContent.appendChild(div1);
+   mainContent.appendChild(tasksContainer);        // set what task container will be in TODAY or THIS WEEK
    mainContent.appendChild(div2);
 
    listenForClicksInMain();
@@ -155,7 +185,7 @@ export function renderInput(selectedElement) {
       div.setAttribute("class", "input-action");
          let input = document.createElement("input");
          input.setAttribute("type", "text");
-         input.setAttribute("maxlength", "50");
+         input.setAttribute("maxlength", "20");
          input.setAttribute("class", "input");
          let div1 = document.createElement("div");
          div1.setAttribute("class", "new-action")
@@ -192,8 +222,8 @@ export function fadeAndStrikeThroughTask(event) {
 }
 
 export function showModal() {
-   let dialog = document.querySelector(".dialog");
    let body = document.querySelector("body");
+   let dialog = document.querySelector(".dialog");
 
    if (dialog.classList.contains("closing")) {
       dialog.classList.remove("closing");
@@ -202,6 +232,19 @@ export function showModal() {
    body.classList.add("blurred");
       // overemphasizing that the dialog should not be blurred
    dialog.style.filter = "none";
+}
+
+export function closeModal() {
+   let body = document.querySelector("body");
+   let dialog = document.querySelector(".dialog");
+   let form = document.querySelector(".dialog__form");
+
+   if (!form.checkValidity()) {
+      form.reportValidity();
+   } else {
+      dialog.close();
+      body.classList.remove("blurred");
+   }
 }
 
 export function slideupModal() {
