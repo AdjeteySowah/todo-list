@@ -11,15 +11,15 @@ export function createTask(title, description, date, priority) {
          this.title = title;
       },
 
-      addDescription(desc) {
+      changeDescription(desc) {
          this.description = desc;
       },
 
-      addDueDate(date) {
+      changeDueDate(date) {
          this.date = date;
       },
 
-      addPriority(prio) {
+      changePriority(prio) {
          this.priority = prio;
       },
 
