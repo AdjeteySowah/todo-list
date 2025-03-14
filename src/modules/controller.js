@@ -1,5 +1,5 @@
 
-import { setActiveTab, renderProjectSection, renderTabContent, renderInput, fadeAndStrikeThroughTask, showModal, slideupModal, closeModal } from "./ui.js";
+import { setActiveTab, renderProjectSection, renderTabContent, renderInput, fadeAndStrikeThroughTask, showModal, slideupModal, closeModal, fillForm } from "./ui.js";
 import { addTaskToArray, removeTaskFromArray, updateTaskStatus, updateTaskDetails } from "./taskManager.js";
 import { createProject } from "./project.js";
 
@@ -45,6 +45,8 @@ function scrollDown() {
       // MAIN CONTENT EVENTS
    // Add project(in sidebar) needs this same functionality
 function handleAddTaskClick(event) {
+   let form = document.querySelector(".dialog__form");
+
    let selectedElementInInbox = event.target.closest(".show-input");
    let selectedElement = event.target.closest(".main-content__action--add-task");
    if (selectedElementInInbox) {
@@ -52,6 +54,7 @@ function handleAddTaskClick(event) {
       scrollDown();
    } else if (selectedElement) {
       changeModalActions(event);
+      form.reset();
       showModal();
    }
 }
@@ -80,9 +83,13 @@ function handleTaskCompletionStatusClick(event) {
    }
 }
 
+export let taskEditClickEventTarget = null;
+
 function handleTaskEditClick(event) {
    let selectedElement = event.target.classList.contains("main-content__task-edit");
    if (selectedElement) {
+      taskEditClickEventTarget = event.target;
+      fillForm();
       changeModalActions(event);
       showModal();
    }
@@ -122,7 +129,9 @@ function handleModalAddClick(event) {
 function handleModalConfirmEditClick(event) {
    let selectedElement = event.target.classList.contains("dialog__form-action--confirm-edit");
    if (selectedElement) {
-      updateTaskDetails(selectedElement);
+      updateTaskDetails();
+      closeModal();
+      renderTabContent();
    }
 }
 
