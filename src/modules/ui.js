@@ -1,5 +1,5 @@
 
-import { listenForClicksInMain } from "./controller.js";
+import { listenForClicksInMain, taskEditClickEventTarget } from "./controller.js";
 import { inboxTasks } from "./taskManager.js";
 import { projects } from "./project.js";
 
@@ -97,6 +97,7 @@ function createTasksElement(taskArray) {
 
       let p1121 = document.createElement("p");
       p1121.setAttribute("class", "main-content__task-due-date");
+      p1121.textContent = task.date;
 
       let img1121 = document.createElement("img");
       img1121.setAttribute("src", edit);
@@ -185,7 +186,7 @@ export function renderInput(selectedElement) {
       div.setAttribute("class", "input-action");
          let input = document.createElement("input");
          input.setAttribute("type", "text");
-         input.setAttribute("maxlength", "20");
+         input.setAttribute("maxlength", "25");
          input.setAttribute("class", "input");
          let div1 = document.createElement("div");
          div1.setAttribute("class", "new-action")
@@ -213,10 +214,22 @@ export function fadeAndStrikeThroughTask(event) {
    let selectedElement = event.target.closest(".main-content__task");
    let taskIndex = event.target.closest(".main-content__task").getAttribute("data-index");
    if (selectedElement) {
-      if (inboxTasks[taskIndex].completed === false) {
-         selectedElement.classList.add("fade", "strike-through");
+      if (selectedElement.closest(".main-content").firstElementChild.textContent === "Inbox") {
+         if (inboxTasks[taskIndex].completed === false) {
+            selectedElement.classList.add("fade", "strike-through");
+         } else {
+            selectedElement.classList.remove("fade", "strike-through");
+         }
       } else {
-         selectedElement.classList.remove("fade", "strike-through");
+         for (let key in projects) {
+            if (key === selectedElement.closest(".main-content").firstElementChild.textContent) {
+               if (projects[key][taskIndex].completed === false) {
+                  selectedElement.classList.add("fade", "strike-through");
+               } else {
+                  selectedElement.classList.remove("fade", "strike-through");
+               }
+            }
+         }
       }
    }
 }
@@ -262,4 +275,34 @@ export function slideupModal() {
 
    body.classList.remove("blurred");
    form.reset();
+}
+
+export function fillForm() {
+   let titleInput = document.querySelector("input[type='text']");
+   let descTextarea = document.querySelector("textarea");
+   let dateInput = document.querySelector("input[type='date']");
+   let prioSelect = document.querySelector("select");
+   let selectedOption = prioSelect.options[prioSelect.selectedIndex];
+
+   let taskIndex = taskEditClickEventTarget.closest(".main-content__task").getAttribute("data-index");
+
+   if (taskEditClickEventTarget.closest(".main-content").firstElementChild.textContent === "Inbox") {
+      titleInput.value = inboxTasks[taskIndex].title;
+      if (inboxTasks[taskIndex].description === undefined) {
+         descTextarea.value = "";
+      } else {
+         descTextarea.value = inboxTasks[taskIndex].description;
+      }
+      dateInput.value = inboxTasks[taskIndex].date;
+      selectedOption.value = inboxTasks[taskIndex].priority;
+   } else {
+      for (let key in projects) {
+         if (key === taskEditClickEventTarget.closest(".main-content").firstElementChild.textContent) {
+            titleInput.value = projects[key][taskIndex].title;
+            descTextarea.value = projects[key][taskIndex].description;
+            dateInput.value = projects[key][taskIndex].date;
+            selectedOption.value = projects[key][taskIndex].priority;
+         }
+      }
+   }
 }
