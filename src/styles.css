@@ -187,7 +187,11 @@ img {
 .main-content {
    grid-area: mn;
 
-   margin: 3rem 10rem 0 10rem;
+   padding: 3rem 10rem;
+   height: auto;
+   overflow-y: auto;
+   scroll-behavior: smooth;
+   scrollbar-gutter: stable;
 }
 
 .main-content__title {
@@ -218,9 +222,9 @@ img {
    cursor: pointer;
 }
 
-/* .main-content__task-due-date:hover {
+.main-content__task-due-date:hover {
    cursor: default;
-} */
+}
 
 .main-content__checkbox-label {
    display: flex;
