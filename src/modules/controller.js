@@ -1,7 +1,7 @@
 
 import { setActiveTab, renderProjectSection, renderTabContent, renderInput, fadeAndStrikeThroughTask, showModal, slideupModal, closeModal, fillForm } from "./ui.js";
 import { addTaskToArray, removeTaskFromArray, updateTaskStatus, updateTaskDetails } from "./taskManager.js";
-import { createProject } from "./project.js";
+import { createProject, deleteProject } from "./project.js";
 
 
       // SIDEBAR EVENTS
@@ -21,10 +21,18 @@ function handleSbAddClick(event) {
    }
 }
 
+function handleSbCancelClick(event) {
+   let selectedElement = event.target.classList.contains("new-cancel");
+   if (selectedElement) {
+      renderProjectSection(selectedElement);
+   }
+}
+
 function handleClicksInSidebar(event) {
    handleTabClick(event);
    handleAddTaskClick(event);
    handleSbAddClick(event);
+   handleSbCancelClick(event);
 }
 
 export function listenForClicksInSidebar() {
@@ -59,10 +67,24 @@ function handleAddTaskClick(event) {
    }
 }
 
+function handleDeleteProjectClick(event) {
+   let selectedElement = event.target.closest(".main-content__action--delete-project");
+   if (selectedElement) {
+      deleteProject(selectedElement);
+   }
+}
+
 function handleAddClick(event) {
    let selectedElement = event.target.classList.contains("new-add");
    if (selectedElement) {
       addTaskToArray();
+      renderTabContent();
+   }
+}
+
+function handleCancelClick(event) {
+   let selectedElement = event.target.classList.contains("new-cancel");
+   if (selectedElement) {
       renderTabContent();
    }
 }
@@ -97,7 +119,9 @@ function handleTaskEditClick(event) {
 
 function handleClicksInMain(event) {
    handleAddTaskClick(event);
+   handleDeleteProjectClick(event);
    handleAddClick(event);
+   handleCancelClick(event);
    handleRemoveTaskClick(event);
    handleTaskCompletionStatusClick(event);
    handleTaskEditClick(event);
