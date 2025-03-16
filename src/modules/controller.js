@@ -143,10 +143,15 @@ function handleModalCancelClick(event) {
 
 function handleModalAddClick(event) {
    let selectedElement = event.target.classList.contains("dialog__form-action--add");
-   if (selectedElement) {
-      addTaskToArray();
+   let form = document.querySelector(".dialog__form");
+   let formIsValid = form.checkValidity();
+
+   if (selectedElement && formIsValid) {
       closeModal();
+      addTaskToArray();
       renderTabContent();
+   } else if (selectedElement) {
+      form.reportValidity();
    }
 }
 
