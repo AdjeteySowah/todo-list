@@ -33,7 +33,8 @@ export function renderProjectSection(selectedElement) {
          if (!selectedElement) {
             let projectsContainer = document.querySelector(".sidebar__projects-container");
             let project = document.createElement("div");
-            project.setAttribute("class", `sidebar__item sidebar__project-item ${formattedTaskInputValue}`);
+            project.setAttribute("class", "sidebar__item sidebar__project-item");
+            project.setAttribute("data-value", `${formattedTaskInputValue}`);
                let descriptionDiv = document.createElement("div");
                descriptionDiv.setAttribute("class", "sidebar__item-description");
                   let img1 = document.createElement("img");
@@ -43,10 +44,7 @@ export function renderProjectSection(selectedElement) {
                   let textNode1 = document.createTextNode(formattedTaskInputValue);
                descriptionDiv.appendChild(img1);
                descriptionDiv.appendChild(textNode1);
-               let badge = document.createElement("p");
-               badge.setAttribute("class", "sidebar__badge");
             project.appendChild(descriptionDiv);
-            project.appendChild(badge);
             projectsContainer.appendChild(project);
 
             let selectedTab = project;
@@ -68,7 +66,7 @@ export function renderProjectSection(selectedElement) {
       projectSection.appendChild(addProjectTab);
    } else {
       let projectsContainer = sidebar.querySelector(".sidebar__projects-container");
-      let projectToBeRemoved = projectsContainer.querySelector(`.${selectedElement}`);
+      let projectToBeRemoved = projectsContainer.querySelector(`.sidebar__project-item[data-value=" ${selectedElement}"]`);
       projectsContainer.removeChild(projectToBeRemoved);
 
       let inboxTabElement = sidebar.querySelector(".sidebar__main-section").firstElementChild;
