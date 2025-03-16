@@ -2,6 +2,8 @@
 import { createTask } from "./task.js";
 import { projects } from "./project.js";
 import { taskEditClickEventTarget } from "./controller.js";
+import { collectAllTasks } from "./filterSort.js";
+
 
 export let inboxTasks = [];
 
@@ -29,6 +31,8 @@ export function addTaskToArray() {
          }
       }
    }
+
+   collectAllTasks();
 }
 
    // completed? / not completed?
