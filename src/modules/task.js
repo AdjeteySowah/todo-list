@@ -1,3 +1,4 @@
+import { formatDate } from "./utility.js";
 
 export function createTask(title, description, date, priority) {
    return {
@@ -16,7 +17,7 @@ export function createTask(title, description, date, priority) {
       },
 
       changeDueDate(date) {
-         this.date = date;
+         this.date = formatDate(date);
       },
 
       changePriority(prio) {
