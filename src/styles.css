@@ -76,6 +76,7 @@ h1, h3 {
    --tertiary-gray: rgba(39, 39, 42, 0.05);
    --faded-red: rgba(255, 0, 0, 0.25);
    --faded-green: rgba(0, 255, 0, 0.5);
+   --green: rgb(0, 255, 0);
    --scrollbar-thumb-color: rgba(0, 0, 0, 0.5);
 }
 
@@ -199,6 +200,12 @@ img {
    font-weight: 700;
    margin-bottom: 1rem;
    padding-left: 1rem;
+}
+
+.main-content__no-task-msg {
+   color: var(--green);
+   font-weight: 500;
+   font-size: 2.5rem;
 }
 
 .main-content__task {
