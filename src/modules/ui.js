@@ -2,6 +2,8 @@
 import { listenForClicksInMain, taskEditClickEventTarget } from "./controller.js";
 import { inboxTasks } from "./taskManager.js";
 import { projects } from "./project.js";
+import { tasksForToday } from "./filterSort.js";
+import { reverseFormatDate } from "./utility.js";
 
 import edit from "../assets/images/edit.svg";
 import deleteIcon from "../assets/images/delete.svg";
@@ -151,8 +153,20 @@ export function renderTabContent() {
       let tasksContainer;
       if (activeTab.firstElementChild.textContent.trim() === "Inbox") {
          tasksContainer = createTasksElement(inboxTasks);
+      } else if (activeTab.firstElementChild.textContent.trim() === "Today") {
+         if (tasksForToday.length === 0) {
+            let div1 = document.createElement("div");
+            div1.setAttribute("class", "main-content__tasks");
+            let par = document.createElement("p");
+            par.setAttribute("class", "main-content__no-task-msg");
+            par.textContent = "No Tasks for Today!";
+            div1.appendChild(par);
+
+            tasksContainer = div1;
+         } else {
+            tasksContainer = createTasksElement(tasksForToday);
+         }
       } else if (activeTab.classList.contains("sidebar__project-item")) {
-         // tasksContainer = createTasksElement(anotherArray);
          for (let key in projects) {
             if (key === activeTab.firstElementChild.textContent.trim()) {
                tasksContainer = createTasksElement(projects[key]);
@@ -179,7 +193,7 @@ export function renderTabContent() {
       }
 
    mainContent.appendChild(h2);
-   mainContent.appendChild(tasksContainer);        // set what task container will be in TODAY or THIS WEEK
+   mainContent.appendChild(tasksContainer);
    mainContent.appendChild(div2);
 
    listenForClicksInMain();
@@ -308,14 +322,14 @@ export function fillForm() {
       } else {
          descTextarea.value = inboxTasks[taskIndex].description;
       }
-      dateInput.value = inboxTasks[taskIndex].date;
+      dateInput.value = reverseFormatDate(inboxTasks[taskIndex].date);
       selectedOption.value = inboxTasks[taskIndex].priority;
    } else {
       for (let key in projects) {
          if (key === taskEditClickEventTarget.closest(".main-content").firstElementChild.textContent) {
             titleInput.value = projects[key][taskIndex].title;
             descTextarea.value = projects[key][taskIndex].description;
-            dateInput.value = projects[key][taskIndex].date;
+            dateInput.value = reverseFormatDate(projects[key][taskIndex].date);
             selectedOption.value = projects[key][taskIndex].priority;
          }
       }
