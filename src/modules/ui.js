@@ -2,13 +2,14 @@
 import { listenForClicksInMain, taskEditClickEventTarget } from "./controller.js";
 import { inboxTasks } from "./taskManager.js";
 import { projects } from "./project.js";
-import { tasksForToday } from "./filterSort.js";
+import { tasksForToday, tasksForTheWeek } from "./filterSort.js";
 import { reverseFormatDate } from "./utility.js";
 
 import edit from "../assets/images/edit.svg";
 import deleteIcon from "../assets/images/delete.svg";
 import listTask from "../assets/images/list-task.svg";
 import plus from "../assets/images/plus.svg";
+import { se } from "date-fns/locale";
 
 export function setActiveTab(selectedTab) {
    let sidebarTabs = document.querySelectorAll(".sidebar__item");
@@ -21,16 +22,16 @@ export function setActiveTab(selectedTab) {
    // display newly added projects in the sidebar
 export function renderProjectSection(selectedElement) {
    let sidebar = document.querySelector(".sidebar");
+   let projectInput = sidebar.querySelector(".input");
 
-   if (sidebar.querySelector(".input")) {
-      let taskInputValue = sidebar.querySelector(".input").value.trim();
+   if (projectInput && projectInput.value !== "") {
+      let taskInputValue = projectInput.value.trim();
       let formattedTaskInputValue;
-      if (sidebar.querySelector(".input").value.trim() !== "") {
-         formattedTaskInputValue = ` ${taskInputValue[0].toUpperCase()}${taskInputValue.slice(1)}`;
-      }
+      formattedTaskInputValue = ` ${taskInputValue.charAt(0).toUpperCase()}${taskInputValue.slice(1).toLowerCase()}`;
 
-      let projectSection = document.querySelector(".sidebar__project-section");
-      let projectSectionLastChild = sidebar.querySelector(".input-action");
+      if (formattedTaskInputValue !== " Inbox" && formattedTaskInputValue !== " Today" && formattedTaskInputValue !== " This week") {
+         let projectSection = document.querySelector(".sidebar__project-section");
+         let projectSectionLastChild = sidebar.querySelector(".input-action");
 
          if (!selectedElement) {
             let projectsContainer = document.querySelector(".sidebar__projects-container");
@@ -64,16 +65,33 @@ export function renderProjectSection(selectedElement) {
          addProjectTab.appendChild(img2);
          addProjectTab.appendChild(textNode2);
 
+         projectSection.removeChild(projectSectionLastChild);
+         projectSection.appendChild(addProjectTab);
+      }  
+   } else if (projectInput && projectInput.value === "" && selectedElement) {
+      let projectSection = document.querySelector(".sidebar__project-section");
+      let projectSectionLastChild = sidebar.querySelector(".input-action");
+
+      let addProjectTab = document.createElement("div");
+      addProjectTab.setAttribute("class", "sidebar__add-project show-input");
+         let img2 = document.createElement("img");
+         img2.setAttribute("class", "sidebar__item-img");
+         img2.setAttribute("src", plus);
+         img2.setAttribute("alt", "plus icon");
+         let textNode2 = document.createTextNode(" Add Project");
+      addProjectTab.appendChild(img2);
+      addProjectTab.appendChild(textNode2);
+
       projectSection.removeChild(projectSectionLastChild);
       projectSection.appendChild(addProjectTab);
-   } else {
+   } else if (selectedElement !== undefined) {
       let projectsContainer = sidebar.querySelector(".sidebar__projects-container");
       let projectToBeRemoved = projectsContainer.querySelector(`.sidebar__project-item[data-value=" ${selectedElement}"]`);
       projectsContainer.removeChild(projectToBeRemoved);
 
       let inboxTabElement = sidebar.querySelector(".sidebar__main-section").firstElementChild;
       setActiveTab(inboxTabElement);
-      renderTabContent();
+      renderTabContent();  
    }
 }
 
@@ -146,7 +164,7 @@ export function renderTabContent() {
       let h2 = document.createElement("h2");
       h2.setAttribute("class", "main-content__title");
       let trimmedTitle = activeTab.firstElementChild.textContent.trim();
-      let formattedTitle = `${trimmedTitle[0].toUpperCase()}${trimmedTitle.slice(1)}`;
+      let formattedTitle = `${trimmedTitle.charAt(0).toUpperCase()}${trimmedTitle.slice(1).toLowerCase()}`;
       h2.textContent = formattedTitle;
 
          // tasks
@@ -165,6 +183,19 @@ export function renderTabContent() {
             tasksContainer = div1;
          } else {
             tasksContainer = createTasksElement(tasksForToday);
+         }
+      } else if (activeTab.firstElementChild.textContent.trim() === "This week") {
+         if (tasksForTheWeek.length === 0) {
+            let div1 = document.createElement("div");
+            div1.setAttribute("class", "main-content__tasks");
+            let par = document.createElement("p");
+            par.setAttribute("class", "main-content__no-task-msg");
+            par.textContent = "No Tasks for the Week!";
+            div1.appendChild(par);
+
+            tasksContainer = div1;
+         } else {
+            tasksContainer = createTasksElement(tasksForTheWeek);
          }
       } else if (activeTab.classList.contains("sidebar__project-item")) {
          for (let key in projects) {
@@ -245,6 +276,18 @@ export function fadeAndStrikeThroughTask(event) {
    if (selectedElement) {
       if (selectedElement.closest(".main-content").firstElementChild.textContent === "Inbox") {
          if (inboxTasks[taskIndex].completed === false) {
+            selectedElement.classList.add("fade", "strike-through");
+         } else {
+            selectedElement.classList.remove("fade", "strike-through");
+         }
+      } else if (selectedElement.closest(".main-content").firstElementChild.textContent === "Today") {
+         if (tasksForToday[taskIndex].completed === false) {
+            selectedElement.classList.add("fade", "strike-through");
+         } else {
+            selectedElement.classList.remove("fade", "strike-through");
+         }
+      } else if (selectedElement.closest(".main-content").firstElementChild.textContent === "This week") {
+         if (tasksForTheWeek[taskIndex].completed === false) {
             selectedElement.classList.add("fade", "strike-through");
          } else {
             selectedElement.classList.remove("fade", "strike-through");
