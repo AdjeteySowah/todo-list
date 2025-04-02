@@ -3,7 +3,7 @@ import { projects } from "./project.js";
 import { inboxTasks } from "./taskManager.js";
 import { format } from "date-fns";
 
-let allTasks = [];
+export let allTasks = [];
 
 export function collectAllTasks() {
    allTasks = [];
@@ -12,9 +12,9 @@ export function collectAllTasks() {
       allTasks.push(...projects[key]);
    }
 
-   console.log(allTasks);
    getTasksWithDate();
-   getTaskForToday();
+   getTasksForToday();
+   getTasksForTheWeek();
 }
 
 let tasksWithDate;
@@ -25,9 +25,22 @@ function getTasksWithDate() {
 
 export let tasksForToday = [];
 
-function getTaskForToday() {
+function getTasksForToday() {
    tasksForToday = tasksWithDate.filter(task => task.date === format(new Date().toDateString(), "EEE, MMM d, yyyy"));
 }
 
+export let tasksForTheWeek = [];
 
-// Find out how tasks can be grouped under "this week" tab
+function getTasksForTheWeek() {
+   let today = new Date();
+   let firstDayOfWeek = new Date(today);
+   firstDayOfWeek.setDate(today.getDate() - (today.getDay() === 0 ? 6 : today.getDay() - 1));
+
+   let lastDayOfWeek = new Date(firstDayOfWeek);
+   lastDayOfWeek.setDate(firstDayOfWeek.getDate() + 6);
+
+   tasksForTheWeek = tasksWithDate.filter((task) => {
+      let taskDate = new Date(Date.parse(task.date));
+      return taskDate >= firstDayOfWeek && taskDate <= lastDayOfWeek;
+   });
+}
