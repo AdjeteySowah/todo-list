@@ -11,12 +11,12 @@ export function createProject() {
    let sidebar = document.querySelector(".sidebar");
    let projectInputValue = sidebar.querySelector(".input").value.trim();
    if (projectInputValue === "") {
-      alert("Invalid project name! Please enter a different name.");
+      alert("Invalid project name! Please enter a valid name.");
       return;
    }
    let formattedProjectInputValue = `${projectInputValue.charAt(0).toUpperCase()}${projectInputValue.slice(1).toLowerCase()}`;
    if (formattedProjectInputValue === "Inbox" || formattedProjectInputValue === "Today" || formattedProjectInputValue === "This week") {
-      alert("Invalid project name! Please enter a different name.");
+      alert("Invalid project name! Please enter a valid name.");
       return;
    }
    projects[formattedProjectInputValue] = [];
