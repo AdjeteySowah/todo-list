@@ -78,7 +78,7 @@ function handleAddClick(event) {
    let selectedElement = event.target.classList.contains("new-add");
    if (selectedElement) {
       addTaskToArray();
-      renderTabContent();
+      renderTabContent(selectedElement);
    }
 }
 
@@ -205,4 +205,3 @@ export function listenForClicksInModal() {
    let dialog = document.querySelector(".dialog");
    dialog.addEventListener("click", handleClicksInModal);
 }
-      
