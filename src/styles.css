@@ -177,6 +177,7 @@ img {
    display: flex;
    justify-content: center;
    align-items: center;
+   opacity: 0;
 }
 
 .sidebar__add-project {
@@ -434,6 +435,10 @@ img {
    /* || INTERACTIONS WITH DOM */
 .active {
    background-color: var(--secondary-gray);
+}
+
+.bold {
+   font-weight: 500;
 }
 
 .fade > * {
