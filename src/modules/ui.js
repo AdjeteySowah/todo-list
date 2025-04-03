@@ -9,13 +9,14 @@ import edit from "../assets/images/edit.svg";
 import deleteIcon from "../assets/images/delete.svg";
 import listTask from "../assets/images/list-task.svg";
 import plus from "../assets/images/plus.svg";
-import { se } from "date-fns/locale";
 
 export function setActiveTab(selectedTab) {
    let sidebarTabs = document.querySelectorAll(".sidebar__item");
    sidebarTabs.forEach((tab) => {
       tab.classList.remove("active");
+      tab.classList.remove("bold");
       selectedTab.classList.add("active");
+      selectedTab.classList.add("bold");
    });
 }
 
@@ -24,7 +25,23 @@ export function renderProjectSection(selectedElement) {
    let sidebar = document.querySelector(".sidebar");
    let projectInput = sidebar.querySelector(".input");
 
-   if (projectInput && projectInput.value !== "") {
+   if (projectInput && selectedElement) {
+      let projectSection = document.querySelector(".sidebar__project-section");
+      let projectSectionLastChild = sidebar.querySelector(".input-action");
+
+      let addProjectTab = document.createElement("div");
+      addProjectTab.setAttribute("class", "sidebar__add-project show-input");
+      let img2 = document.createElement("img");
+      img2.setAttribute("class", "sidebar__item-img");
+      img2.setAttribute("src", plus);
+      img2.setAttribute("alt", "plus icon");
+      let textNode2 = document.createTextNode(" Add Project");
+      addProjectTab.appendChild(img2);
+      addProjectTab.appendChild(textNode2);
+
+      projectSection.removeChild(projectSectionLastChild);
+      projectSection.appendChild(addProjectTab);
+   } else if (projectInput && projectInput.value !== "") {
       let taskInputValue = projectInput.value.trim();
       let formattedTaskInputValue;
       formattedTaskInputValue = ` ${taskInputValue.charAt(0).toUpperCase()}${taskInputValue.slice(1).toLowerCase()}`;
@@ -38,15 +55,15 @@ export function renderProjectSection(selectedElement) {
             let project = document.createElement("div");
             project.setAttribute("class", "sidebar__item sidebar__project-item");
             project.setAttribute("data-value", `${formattedTaskInputValue}`);
-               let descriptionDiv = document.createElement("div");
-               descriptionDiv.setAttribute("class", "sidebar__item-description");
-                  let img1 = document.createElement("img");
-                  img1.setAttribute("class", "sidebar__item-img");
-                  img1.setAttribute("src", listTask);
-                  img1.setAttribute("alt", "task-list icon");
-                  let textNode1 = document.createTextNode(formattedTaskInputValue);
-               descriptionDiv.appendChild(img1);
-               descriptionDiv.appendChild(textNode1);
+            let descriptionDiv = document.createElement("div");
+            descriptionDiv.setAttribute("class", "sidebar__item-description");
+            let img1 = document.createElement("img");
+            img1.setAttribute("class", "sidebar__item-img");
+            img1.setAttribute("src", listTask);
+            img1.setAttribute("alt", "task-list icon");
+            let textNode1 = document.createTextNode(formattedTaskInputValue);
+            descriptionDiv.appendChild(img1);
+            descriptionDiv.appendChild(textNode1);
             project.appendChild(descriptionDiv);
             projectsContainer.appendChild(project);
 
@@ -57,33 +74,17 @@ export function renderProjectSection(selectedElement) {
          
          let addProjectTab = document.createElement("div");
          addProjectTab.setAttribute("class", "sidebar__add-project show-input");
-            let img2 = document.createElement("img");
-            img2.setAttribute("class", "sidebar__item-img");
-            img2.setAttribute("src", plus);
-            img2.setAttribute("alt", "plus icon");
-            let textNode2 = document.createTextNode(" Add Project");
+         let img2 = document.createElement("img");
+         img2.setAttribute("class", "sidebar__item-img");
+         img2.setAttribute("src", plus);
+         img2.setAttribute("alt", "plus icon");
+         let textNode2 = document.createTextNode(" Add Project");
          addProjectTab.appendChild(img2);
          addProjectTab.appendChild(textNode2);
 
          projectSection.removeChild(projectSectionLastChild);
          projectSection.appendChild(addProjectTab);
       }  
-   } else if (projectInput && projectInput.value === "" && selectedElement) {
-      let projectSection = document.querySelector(".sidebar__project-section");
-      let projectSectionLastChild = sidebar.querySelector(".input-action");
-
-      let addProjectTab = document.createElement("div");
-      addProjectTab.setAttribute("class", "sidebar__add-project show-input");
-         let img2 = document.createElement("img");
-         img2.setAttribute("class", "sidebar__item-img");
-         img2.setAttribute("src", plus);
-         img2.setAttribute("alt", "plus icon");
-         let textNode2 = document.createTextNode(" Add Project");
-      addProjectTab.appendChild(img2);
-      addProjectTab.appendChild(textNode2);
-
-      projectSection.removeChild(projectSectionLastChild);
-      projectSection.appendChild(addProjectTab);
    } else if (selectedElement !== undefined) {
       let projectsContainer = sidebar.querySelector(".sidebar__projects-container");
       let projectToBeRemoved = projectsContainer.querySelector(`.sidebar__project-item[data-value=" ${selectedElement}"]`);
@@ -92,6 +93,25 @@ export function renderProjectSection(selectedElement) {
       let inboxTabElement = sidebar.querySelector(".sidebar__main-section").firstElementChild;
       setActiveTab(inboxTabElement);
       renderTabContent();  
+   }
+}
+
+export function updateBadgeNumber() {
+   let badgeForToday = document.querySelector(".sb--today");
+   let badgeForWeek = document.querySelector(".sb--this-week");
+
+   if (tasksForToday.length === 0) {
+      badgeForToday.style.cssText = "opacity: 0;";
+   } else {
+      badgeForToday.style.cssText = "opacity: 1;";
+      badgeForToday.textContent = tasksForToday.length;
+   }
+
+   if (tasksForTheWeek.length === 0) {
+      badgeForWeek.style.cssText = "opacity: 0;";
+   } else {
+      badgeForWeek.style.cssText = "opacity: 1;";
+      badgeForWeek.textContent = tasksForTheWeek.length;
    }
 }
 
@@ -156,72 +176,79 @@ function createTasksElement(taskArray) {
    return div1;
 }
 
-export function renderTabContent() {
-   let activeTab = document.querySelector(".active");
+export function renderTabContent(selectedElement) {
    let mainContent = document.querySelector(".main-content");
+
+   let taskInput = mainContent.querySelector(".input");
+   if (taskInput && taskInput.value === "" && selectedElement) {
+      return;
+   }
+
+   let activeTab = document.querySelector(".active");
    mainContent.innerHTML = "";
-         // title
-      let h2 = document.createElement("h2");
-      h2.setAttribute("class", "main-content__title");
-      let trimmedTitle = activeTab.firstElementChild.textContent.trim();
-      let formattedTitle = `${trimmedTitle.charAt(0).toUpperCase()}${trimmedTitle.slice(1).toLowerCase()}`;
-      h2.textContent = formattedTitle;
+      // title
+   let h2 = document.createElement("h2");
+   h2.setAttribute("class", "main-content__title");
+   let trimmedTitle = activeTab.firstElementChild.textContent.trim();
+   let formattedTitle = `${trimmedTitle.charAt(0).toUpperCase()}${trimmedTitle.slice(1).toLowerCase()}`;
+   h2.textContent = formattedTitle;
 
-         // tasks
-      let tasksContainer;
-      if (activeTab.firstElementChild.textContent.trim() === "Inbox") {
-         tasksContainer = createTasksElement(inboxTasks);
-      } else if (activeTab.firstElementChild.textContent.trim() === "Today") {
-         if (tasksForToday.length === 0) {
-            let div1 = document.createElement("div");
-            div1.setAttribute("class", "main-content__tasks");
-            let par = document.createElement("p");
-            par.setAttribute("class", "main-content__no-task-msg");
-            par.textContent = "No Tasks for Today!";
-            div1.appendChild(par);
+      // tasks
+   let tasksContainer;
+   if (activeTab.firstElementChild.textContent.trim() === "Inbox") {
+      tasksContainer = createTasksElement(inboxTasks);
+   } else if (activeTab.firstElementChild.textContent.trim() === "Today") {
+      if (tasksForToday.length === 0) {
+         let div1 = document.createElement("div");
+         div1.setAttribute("class", "main-content__tasks");
+         let par = document.createElement("p");
+         par.setAttribute("class", "main-content__no-task-msg");
+         par.textContent = "No Tasks for Today!";
+         div1.appendChild(par);
 
-            tasksContainer = div1;
-         } else {
-            tasksContainer = createTasksElement(tasksForToday);
-         }
-      } else if (activeTab.firstElementChild.textContent.trim() === "This week") {
-         if (tasksForTheWeek.length === 0) {
-            let div1 = document.createElement("div");
-            div1.setAttribute("class", "main-content__tasks");
-            let par = document.createElement("p");
-            par.setAttribute("class", "main-content__no-task-msg");
-            par.textContent = "No Tasks for the Week!";
-            div1.appendChild(par);
+         tasksContainer = div1;
+      } else {
+         tasksContainer = createTasksElement(tasksForToday);
+      }
+   } else if (activeTab.firstElementChild.textContent.trim() === "This week") {
+      if (tasksForTheWeek.length === 0) {
+         let div1 = document.createElement("div");
+         div1.setAttribute("class", "main-content__tasks");
+         let par = document.createElement("p");
+         par.setAttribute("class", "main-content__no-task-msg");
+         par.textContent = "No Tasks for the Week!";
+         div1.appendChild(par);
 
-            tasksContainer = div1;
-         } else {
-            tasksContainer = createTasksElement(tasksForTheWeek);
-         }
-      } else if (activeTab.classList.contains("sidebar__project-item")) {
-         for (let key in projects) {
-            if (key === activeTab.firstElementChild.textContent.trim()) {
-               tasksContainer = createTasksElement(projects[key]);
-            }
+         tasksContainer = div1;
+      } else {
+         tasksContainer = createTasksElement(tasksForTheWeek);
+      }
+   } else if (activeTab.classList.contains("sidebar__project-item")) {
+      for (let key in projects) {
+         if (key === activeTab.firstElementChild.textContent.trim()) {
+            tasksContainer = createTasksElement(projects[key]);
          }
       }
+   }
 
-         // actions
-         let div2 = document.createElement("div");
-      if (activeTab.firstElementChild.textContent.trim() === "Inbox") {
-         div2.setAttribute("class", "main-content__action--add-task show-input");
-         div2.textContent = "Add Task";
-      } else if (activeTab.classList.contains("sidebar__project-item")) {
-         div2.setAttribute("class", "main-content__action");
-            let div21 = document.createElement("div");
-            div21.setAttribute("class", "main-content__action--add-task");
-            div21.textContent = "Add Task";
-            
-            let div22 = document.createElement("div");
-            div22.setAttribute("class", "main-content__action--delete-project");
-            div22.textContent = "Delete Project";      
-         div2.appendChild(div21);
-         div2.appendChild(div22);
-      }
+      // actions
+   let div2 = document.createElement("div");
+
+   if (activeTab.firstElementChild.textContent.trim() === "Inbox") {
+      div2.setAttribute("class", "main-content__action--add-task show-input");
+      div2.textContent = "Add Task";
+   } else if (activeTab.classList.contains("sidebar__project-item")) {
+      div2.setAttribute("class", "main-content__action");
+      let div21 = document.createElement("div");
+      div21.setAttribute("class", "main-content__action--add-task");
+      div21.textContent = "Add Task";
+      
+      let div22 = document.createElement("div");
+      div22.setAttribute("class", "main-content__action--delete-project");
+      div22.textContent = "Delete Project";      
+      div2.appendChild(div21);
+      div2.appendChild(div22);
+   }
 
    mainContent.appendChild(h2);
    mainContent.appendChild(tasksContainer);
@@ -242,24 +269,24 @@ export function renderInput(selectedElement) {
       projectSection.removeChild(projectSectionLastChild);
    }
    
-      let div = document.createElement("div");
-      div.setAttribute("class", "input-action");
-         let input = document.createElement("input");
-         input.setAttribute("type", "text");
-         input.setAttribute("maxlength", "25");
-         input.setAttribute("class", "input");
-         let div1 = document.createElement("div");
-         div1.setAttribute("class", "new-action")
-            let div11 = document.createElement("div");
-            div11.setAttribute("class", "new-add");
-            div11.textContent = "Add";
-            let div12 = document.createElement("div");
-            div12.setAttribute("class", "new-cancel");
-            div12.textContent = "Cancel";
-         div1.appendChild(div11);
-         div1.appendChild(div12);
-      div.appendChild(input);
-      div.appendChild(div1);
+   let div = document.createElement("div");
+   div.setAttribute("class", "input-action");
+   let input = document.createElement("input");
+   input.setAttribute("type", "text");
+   input.setAttribute("maxlength", "25");
+   input.setAttribute("class", "input");
+   let div1 = document.createElement("div");
+   div1.setAttribute("class", "new-action")
+   let div11 = document.createElement("div");
+   div11.setAttribute("class", "new-add");
+   div11.textContent = "Add";
+   let div12 = document.createElement("div");
+   div12.setAttribute("class", "new-cancel");
+   div12.textContent = "Cancel";
+   div1.appendChild(div11);
+   div1.appendChild(div12);
+   div.appendChild(input);
+   div.appendChild(div1);
 
    if (selectedElement.classList.contains("main-content__action--add-task")) {
       mainContent.appendChild(div);
