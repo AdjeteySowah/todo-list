@@ -1,9 +1,10 @@
 
 import { projects } from "./project.js";
 import { inboxTasks } from "./taskManager.js";
+import { updateBadgeNumber } from "./ui.js";
 import { format } from "date-fns";
 
-export let allTasks = [];
+let allTasks = [];
 
 export function collectAllTasks() {
    allTasks = [];
@@ -27,6 +28,7 @@ export let tasksForToday = [];
 
 function getTasksForToday() {
    tasksForToday = tasksWithDate.filter(task => task.date === format(new Date().toDateString(), "EEE, MMM d, yyyy"));
+   updateBadgeNumber();
 }
 
 export let tasksForTheWeek = [];
@@ -43,4 +45,6 @@ function getTasksForTheWeek() {
       let taskDate = new Date(Date.parse(task.date));
       return taskDate >= firstDayOfWeek && taskDate <= lastDayOfWeek;
    });
+
+   updateBadgeNumber();
 }
