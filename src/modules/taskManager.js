@@ -14,8 +14,12 @@ export function addTaskToArray() {
    if (activeTab.firstElementChild.textContent.trim() === "Inbox") {
       let mainContent = document.querySelector(".main-content");
       let taskInput = mainContent.querySelector(".input");
-      let newTask = createTask(taskInput.value, undefined, undefined, undefined, "Inbox");
-      inboxTasks.push(newTask);
+      if (taskInput.value === "") {
+         alert("Invalid task name! Please enter a valid name.");
+      } else {
+         let newTask = createTask(taskInput.value, undefined, undefined, undefined, "Inbox");
+         inboxTasks.push(newTask);
+      }
    } else if (activeTab.firstElementChild.textContent.trim() !== "Today" || 
       activeTab.firstElementChild.textContent.trim() !== "This week") {
       let titleInput = document.querySelector("input[type='text']");
