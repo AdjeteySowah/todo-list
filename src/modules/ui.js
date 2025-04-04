@@ -41,7 +41,7 @@ export function renderProjectSection(selectedElement) {
 
       projectSection.removeChild(projectSectionLastChild);
       projectSection.appendChild(addProjectTab);
-   } else if (projectInput && projectInput.value !== "") {
+   } else if ((projectInput && projectInput.value !== "")) { //|| Object.keys(projects).length > 0) {
       let taskInputValue = projectInput.value.trim();
       let formattedTaskInputValue;
       formattedTaskInputValue = ` ${taskInputValue.charAt(0).toUpperCase()}${taskInputValue.slice(1).toLowerCase()}`;
@@ -67,9 +67,11 @@ export function renderProjectSection(selectedElement) {
             project.appendChild(descriptionDiv);
             projectsContainer.appendChild(project);
 
-            let selectedTab = project;
-            setActiveTab(selectedTab);
-            renderTabContent();
+            if (projectInput) {
+               let selectedTab = project;
+               setActiveTab(selectedTab);
+               renderTabContent();
+            }
          }
          
          let addProjectTab = document.createElement("div");
@@ -84,7 +86,27 @@ export function renderProjectSection(selectedElement) {
 
          projectSection.removeChild(projectSectionLastChild);
          projectSection.appendChild(addProjectTab);
-      }  
+      } else {
+         for (let key in projects) {
+            let projectsContainer = document.querySelector(".sidebar__projects-container");
+   
+            let project = document.createElement("div");
+            project.setAttribute("class", "sidebar__item sidebar__project-item");
+            project.setAttribute("data-value", `${key}`);
+            let descriptionDiv = document.createElement("div");
+            descriptionDiv.setAttribute("class", "sidebar__item-description");
+            let img1 = document.createElement("img");
+            img1.setAttribute("class", "sidebar__item-img");
+            img1.setAttribute("src", listTask);
+            img1.setAttribute("alt", "task-list icon");
+            let textNode1 = document.createTextNode(key);
+            descriptionDiv.appendChild(img1);
+            descriptionDiv.appendChild(textNode1);
+            project.appendChild(descriptionDiv);
+   
+            projectsContainer.appendChild(project);
+         }
+      }    
    } else if (selectedElement !== undefined) {
       let projectsContainer = sidebar.querySelector(".sidebar__projects-container");
       let projectToBeRemoved = projectsContainer.querySelector(`.sidebar__project-item[data-value=" ${selectedElement}"]`);
@@ -381,7 +403,6 @@ export function fillForm() {
    let descTextarea = document.querySelector("textarea");
    let dateInput = document.querySelector("input[type='date']");
    let prioSelect = document.querySelector("select");
-   let selectedOption = prioSelect.options[prioSelect.selectedIndex];
 
    let taskIndex = taskEditClickEventTarget.closest(".main-content__task").getAttribute("data-index");
 
@@ -393,14 +414,32 @@ export function fillForm() {
          descTextarea.value = inboxTasks[taskIndex].description;
       }
       dateInput.value = reverseFormatDate(inboxTasks[taskIndex].date);
-      selectedOption.value = inboxTasks[taskIndex].priority;
-   } else {
+      prioSelect.value = inboxTasks[taskIndex].priority.toLowerCase();
+   }  else if (taskEditClickEventTarget.closest(".main-content").firstElementChild.textContent === "Today") {
+      titleInput.value = tasksForToday[taskIndex].title;
+      if (tasksForToday[taskIndex].description === undefined) {
+         descTextarea.value = "";
+      } else {
+         descTextarea.value = tasksForToday[taskIndex].description;
+      }
+      dateInput.value = reverseFormatDate(tasksForToday[taskIndex].date);
+      prioSelect.value = tasksForToday[taskIndex].priority.toLowerCase();
+   }  else if (taskEditClickEventTarget.closest(".main-content").firstElementChild.textContent === "This week") {
+      titleInput.value = tasksForTheWeek[taskIndex].title;
+      if (tasksForTheWeek[taskIndex].description === undefined) {
+         descTextarea.value = "";
+      } else {
+         descTextarea.value = tasksForTheWeek[taskIndex].description;
+      }
+      dateInput.value = reverseFormatDate(tasksForTheWeek[taskIndex].date);
+      prioSelect.value = tasksForTheWeek[taskIndex].priority.toLowerCase();
+   }  else {
       for (let key in projects) {
          if (key === taskEditClickEventTarget.closest(".main-content").firstElementChild.textContent) {
             titleInput.value = projects[key][taskIndex].title;
             descTextarea.value = projects[key][taskIndex].description;
             dateInput.value = reverseFormatDate(projects[key][taskIndex].date);
-            selectedOption.value = projects[key][taskIndex].priority;
+            prioSelect.value = projects[key][taskIndex].priority.toLowerCase();
          }
       }
    }
