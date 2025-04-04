@@ -4,6 +4,7 @@ import { projects } from "./project.js";
 import { taskEditClickEventTarget } from "./controller.js";
 import { collectAllTasks, tasksForToday, tasksForTheWeek } from "./filterSort.js";
 import { formatDate } from "./utility.js";
+import { storeInLocalStorage } from "./storage.js";
 
 
 export let inboxTasks = [];
@@ -37,6 +38,7 @@ export function addTaskToArray() {
    }
 
    collectAllTasks();
+   storeInLocalStorage();
 }
 
    // completed? / not completed?
@@ -57,6 +59,9 @@ export function updateTaskStatus(event) {
          }
       }
    }
+
+   collectAllTasks();
+   storeInLocalStorage();
 }
 
    // shows modal before editing can be done
@@ -97,6 +102,7 @@ export function updateTaskDetails() {
    }
 
    collectAllTasks();
+   storeInLocalStorage();
 }
 
 export function removeTaskFromArray(event) {
@@ -137,4 +143,5 @@ export function removeTaskFromArray(event) {
    }
 
    collectAllTasks();
+   storeInLocalStorage();
 }
