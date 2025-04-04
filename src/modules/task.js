@@ -1,13 +1,13 @@
 import { formatDate } from "./utility.js";
 
-export function createTask(title, description = undefined, date = undefined, priority = undefined, project) {
+export function createTask(title, description = undefined, date = undefined, priority = "Medium", project, completed = false) {
    return {
       title,
       description,
       date,
       priority,
       project,
-      completed: false,
+      completed,
       
       changeTitle(title) {
          this.title = title;
