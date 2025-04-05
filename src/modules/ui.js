@@ -4,6 +4,7 @@ import { inboxTasks } from "./taskManager.js";
 import { projects } from "./project.js";
 import { tasksForToday, tasksForTheWeek } from "./filterSort.js";
 import { reverseFormatDate } from "./utility.js";
+import { retrievedProjectsObject } from "./storage.js";
 
 import edit from "../assets/images/edit.svg";
 import deleteIcon from "../assets/images/delete.svg";
@@ -23,8 +24,10 @@ export function setActiveTab(selectedTab) {
    // display newly added projects in the sidebar
 export function renderProjectSection(selectedElement) {
    let sidebar = document.querySelector(".sidebar");
+   let sidebarProjItems = document.querySelectorAll(".sidebar__project-item");
    let projectInput = sidebar.querySelector(".input");
 
+      // when cancel is clicked
    if (projectInput && selectedElement) {
       let projectSection = document.querySelector(".sidebar__project-section");
       let projectSectionLastChild = sidebar.querySelector(".input-action");
@@ -41,12 +44,17 @@ export function renderProjectSection(selectedElement) {
 
       projectSection.removeChild(projectSectionLastChild);
       projectSection.appendChild(addProjectTab);
-   } else if ((projectInput && projectInput.value !== "")) { //|| Object.keys(projects).length > 0) {
-      let taskInputValue = projectInput.value.trim();
+         // when a project is actually added or when the page is loaded
+   } else if ((projectInput && projectInput.value !== "") || Object.keys(retrievedProjectsObject).length > 0) {
+      let taskInputValue;
       let formattedTaskInputValue;
-      formattedTaskInputValue = ` ${taskInputValue.charAt(0).toUpperCase()}${taskInputValue.slice(1).toLowerCase()}`;
+      
+      if (projectInput) {
+         taskInputValue = projectInput.value.trim();
+         formattedTaskInputValue = ` ${taskInputValue.charAt(0).toUpperCase()}${taskInputValue.slice(1).toLowerCase()}`;
+      }
 
-      if (formattedTaskInputValue !== " Inbox" && formattedTaskInputValue !== " Today" && formattedTaskInputValue !== " This week") {
+      if (formattedTaskInputValue !== " Inbox" && formattedTaskInputValue !== " Today" && formattedTaskInputValue !== " This week" && formattedTaskInputValue !== undefined && formattedTaskInputValue !== " ") {
          let projectSection = document.querySelector(".sidebar__project-section");
          let projectSectionLastChild = sidebar.querySelector(".input-action");
 
@@ -86,7 +94,9 @@ export function renderProjectSection(selectedElement) {
 
          projectSection.removeChild(projectSectionLastChild);
          projectSection.appendChild(addProjectTab);
-      } else {
+
+            // when the page is loaded and some projects are saved in the local storage
+      } else if (sidebarProjItems.length < Object.keys(retrievedProjectsObject).length) {
          for (let key in projects) {
             let projectsContainer = document.querySelector(".sidebar__projects-container");
    
@@ -106,7 +116,8 @@ export function renderProjectSection(selectedElement) {
    
             projectsContainer.appendChild(project);
          }
-      }    
+      }
+         // when delete project is clicked    
    } else if (selectedElement !== undefined) {
       let projectsContainer = sidebar.querySelector(".sidebar__projects-container");
       let projectToBeRemoved = projectsContainer.querySelector(`.sidebar__project-item[data-value=" ${selectedElement}"]`);
