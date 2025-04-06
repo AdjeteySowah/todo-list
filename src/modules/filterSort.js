@@ -5,6 +5,10 @@ import { updateBadgeNumber } from "./ui.js";
 import { format } from "date-fns";
 
 let allTasks = [];
+let tasksWithDate;
+export let tasksForToday = [];
+export let tasksForTheWeek = [];
+
 
 export function collectAllTasks() {
    allTasks = [];
@@ -13,25 +17,22 @@ export function collectAllTasks() {
       allTasks.push(...projects[key]);
    }
 
+      // find out why these functions have to be called
    getTasksWithDate();
    getTasksForToday();
    getTasksForTheWeek();
 }
 
-let tasksWithDate;
-
 function getTasksWithDate() {
    tasksWithDate = allTasks.filter(task => task.date !== undefined && task.date !== "");
 }
 
-export let tasksForToday = [];
-
 function getTasksForToday() {
    tasksForToday = tasksWithDate.filter(task => task.date === format(new Date().toDateString(), "EEE, MMM d, yyyy"));
+   console.log(tasksForToday);
+
    updateBadgeNumber();
 }
-
-export let tasksForTheWeek = [];
 
 function getTasksForTheWeek() {
    let today = new Date();
