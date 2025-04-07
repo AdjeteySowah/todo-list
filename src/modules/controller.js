@@ -2,6 +2,7 @@
 import { setActiveTab, renderProjectSection, renderTabContent, renderInput, fadeAndStrikeThroughTask, showModal, slideupModal, closeModal, fillForm } from "./ui.js";
 import { addTaskToArray, removeTaskFromArray, updateTaskStatus, updateTaskDetails } from "./taskManager.js";
 import { createProject, deleteProject } from "./project.js";
+import { retrieveFromLocalStorage } from "./storage.js";
 
 
       // SIDEBAR EVENTS
@@ -204,4 +205,9 @@ function handleClicksInModal(event) {
 export function listenForClicksInModal() {
    let dialog = document.querySelector(".dialog");
    dialog.addEventListener("click", handleClicksInModal);
+}
+
+      // PAGE LOAD EVENT
+export function listenForPageLoad() {
+   window.addEventListener("load", retrieveFromLocalStorage);
 }
