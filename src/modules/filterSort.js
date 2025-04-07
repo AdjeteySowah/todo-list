@@ -2,10 +2,9 @@
 import { projects } from "./project.js";
 import { inboxTasks } from "./taskManager.js";
 import { updateBadgeNumber } from "./ui.js";
-import { format } from "date-fns";
 
 let allTasks = [];
-let tasksWithDate;
+let tasksWithDate = [];
 export let tasksForToday = [];
 export let tasksForTheWeek = [];
 
@@ -17,7 +16,6 @@ export function collectAllTasks() {
       allTasks.push(...projects[key]);
    }
 
-      // find out why these functions have to be called
    getTasksWithDate();
    getTasksForToday();
    getTasksForTheWeek();
@@ -27,23 +25,35 @@ function getTasksWithDate() {
    tasksWithDate = allTasks.filter(task => task.date !== undefined && task.date !== "");
 }
 
-function getTasksForToday() {
-   tasksForToday = tasksWithDate.filter(task => task.date === format(new Date().toDateString(), "EEE, MMM d, yyyy"));
-   console.log(tasksForToday);
+export function getTasksForToday() {
+   let today = new Date();
+   today.setHours(0, 0, 0, 0);
+ 
+   tasksForToday = tasksWithDate.filter((task) => {
+      let taskDate = new Date(task.date);
+      taskDate.setHours(0, 0, 0, 0);
+      return taskDate.getTime() === today.getTime();
+   });
 
    updateBadgeNumber();
 }
 
-function getTasksForTheWeek() {
+
+export function getTasksForTheWeek() {
    let today = new Date();
+
    let firstDayOfWeek = new Date(today);
-   firstDayOfWeek.setDate(today.getDate() - (today.getDay() === 0 ? 6 : today.getDay() - 1));
+   firstDayOfWeek.setDate(
+      today.getDate() - (today.getDay() === 0 ? 6 : today.getDay() - 1)
+   );
+   firstDayOfWeek.setHours(0, 0, 0, 0); // set to start of day
 
    let lastDayOfWeek = new Date(firstDayOfWeek);
    lastDayOfWeek.setDate(firstDayOfWeek.getDate() + 6);
+   lastDayOfWeek.setHours(23, 59, 59, 999); // set to end of day
 
    tasksForTheWeek = tasksWithDate.filter((task) => {
-      let taskDate = new Date(Date.parse(task.date));
+      let taskDate = new Date(task.date);
       return taskDate >= firstDayOfWeek && taskDate <= lastDayOfWeek;
    });
 
