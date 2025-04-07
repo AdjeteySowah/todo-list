@@ -1,8 +1,8 @@
 
 import { inboxTasks } from "./taskManager";
-import { tasksForToday, tasksForTheWeek } from "./filterSort";
+import { collectAllTasks, tasksForToday, tasksForTheWeek } from "./filterSort";
 import { projects } from "./project";
-import { renderTabContent, updateBadgeNumber, renderProjectSection } from "./ui";
+import { renderTabContent, renderProjectSection } from "./ui";
 import { createTask } from "./task";
 
 export function storeInLocalStorage() {
@@ -13,14 +13,10 @@ export function storeInLocalStorage() {
 }
 
 let retrievedInboxArray;
-let retrievedTodayArray;
-let retrievedThisWeekArray;
-let retrievedProjectsObject;
+export let retrievedProjectsObject;
 
 export function retrieveFromLocalStorage() {
    retrievedInboxArray = JSON.parse(localStorage.getItem("Inbox")) || [];
-   retrievedTodayArray = JSON.parse(localStorage.getItem("Today")) || [];
-   retrievedThisWeekArray = JSON.parse(localStorage.getItem("This week")) || [];
    retrievedProjectsObject = JSON.parse(localStorage.getItem("Projects")) || {};
 
    addMethodsToRetrievedTasksObjects();
@@ -34,31 +30,20 @@ function addMethodsToRetrievedTasksObjects() {
       inboxTasks.push(...retrievedInboxArrayWithMethods);
    }
 
-   if (retrievedTodayArray.length > 0) {
-      let retrievedTodayArrayWithMethods = retrievedTodayArray.map((task) => {
-         return createTask(task.title, task.description, task.date, task.priority, task.project, task.completed);
-      });
-      tasksForToday.push(...retrievedTodayArrayWithMethods);
-   }
-
-   if (retrievedThisWeekArray.length > 0) {
-      let retrievedThisWeekArrayWithMethods = retrievedThisWeekArray.map((task) => {
-         return createTask(task.title, task.description, task.date, task.priority, task.project, task.completed);
-      });
-      tasksForTheWeek.push(...retrievedThisWeekArrayWithMethods);
-   }
-
    if (Object.keys(retrievedProjectsObject).length > 0) {
+      let retrievedProjectsObjectWithMethods = {};
+   
       for (let key in retrievedProjectsObject) {
-         retrievedProjectsObject[key].map((task) => {
+         retrievedProjectsObjectWithMethods[key] = retrievedProjectsObject[key].map((task) => {
             return createTask(task.title, task.description, task.date, task.priority, task.project, task.completed);
          });
       }
-
-      Object.assign(projects, retrievedProjectsObject);
+   
+      Object.assign(projects, retrievedProjectsObjectWithMethods);
    }
+   
 
-   renderTabContent();
-   updateBadgeNumber();
-   renderProjectSection();
+   renderTabContent();        // displays content of inbox
+   collectAllTasks();         // gets task for today and week. Hence no need to retrieve them from local storage
+   renderProjectSection();    // displays projects retrieved from storage in sidebar
 }
