@@ -51,8 +51,7 @@ export function updateTaskStatus(event) {
       tasksForToday[taskIndex].changeCompletedStatus();
    } else if (event.target.closest(".main-content").firstElementChild.textContent === "This week") {
       tasksForTheWeek[taskIndex].changeCompletedStatus();
-   }
-   else {
+   } else {
       for (let key in projects) {
          if (key === event.target.closest(".main-content").firstElementChild.textContent) {
             projects[key][taskIndex].changeCompletedStatus();
