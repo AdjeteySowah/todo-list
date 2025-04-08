@@ -91,61 +91,89 @@ export function updateTaskDetails() {
    let selectedOption = prioSelect.options[prioSelect.selectedIndex];
 
    if (activeTab.firstElementChild.textContent.trim() === "Inbox") {
+      let newTitle = titleInput.value;
+      let isDuplicate = false;
+
       for (let i = 0; i < inboxTasks.length; i++) {
-         let taskTitle = inboxTasks[i].title;
-         if (taskTitle === titleInput.value) {
-            alert("Invalid task name! Task names must be different.");
-            return;
+         if (i !== Number(taskIndex) && inboxTasks[i].title === newTitle) {
+            isDuplicate = true;
+            break;
          }
       }
 
-      inboxTasks[taskIndex].changeTitle(titleInput.value);
+      if (isDuplicate) {
+         alert("Invalid task name! Task names must be different.");
+         return;
+      }
+
+      inboxTasks[taskIndex].changeTitle(newTitle);
       inboxTasks[taskIndex].changeDescription(descTextarea.value);
       inboxTasks[taskIndex].changeDueDate(dateInput.value);
       inboxTasks[taskIndex].changePriority(selectedOption.text);
    } else if (activeTab.firstElementChild.textContent.trim() === "Today") {
+      let newTitle = titleInput.value;
+      let isDuplicate = false;
+
       for (let i = 0; i < tasksForToday.length; i++) {
-         let taskTitle = tasksForToday[i].title;
-         if (taskTitle === titleInput.value) {
-            alert("Invalid task name! Task names must be different.");
-            return;
+         if (i !== Number(taskIndex) && tasksForToday[i].title === newTitle) {
+            isDuplicate = true;
+            break;
          }
       }
 
-      tasksForToday[taskIndex].changeTitle(titleInput.value);
+      if (isDuplicate) {
+         alert("Invalid task name! Task names must be different.");
+         return;
+      }
+
+      tasksForToday[taskIndex].changeTitle(newTitle);
       tasksForToday[taskIndex].changeDescription(descTextarea.value);
       tasksForToday[taskIndex].changeDueDate(dateInput.value);
       tasksForToday[taskIndex].changePriority(selectedOption.text);
    } else if (activeTab.firstElementChild.textContent.trim() === "This week") {
+      let newTitle = titleInput.value;
+      let isDuplicate = false;
+
       for (let i = 0; i < tasksForTheWeek.length; i++) {
-         let taskTitle = tasksForTheWeek[i].title;
-         if (taskTitle === titleInput.value) {
-            alert("Invalid task name! Task names must be different.");
-            return;
+         if (i !== Number(taskIndex) && tasksForTheWeek[i].title === newTitle) {
+            isDuplicate = true;
+            break;
          }
       }
 
-      tasksForTheWeek[taskIndex].changeTitle(titleInput.value);
+      if (isDuplicate) {
+         alert("Invalid task name! Task names must be different.");
+         return;
+      }
+
+      tasksForTheWeek[taskIndex].changeTitle(newTitle);
       tasksForTheWeek[taskIndex].changeDescription(descTextarea.value);
       tasksForTheWeek[taskIndex].changeDueDate(dateInput.value);
       tasksForTheWeek[taskIndex].changePriority(selectedOption.text);
    } else {
       for (let key in projects) {
          if (key === activeTab.firstElementChild.textContent.trim()) {
+            let newTitle = titleInput.value;
+            let isDuplicate = false;
+      
             for (let i = 0; i < projects[key].length; i++) {
-               let taskTitle = projects[key][i].title;
-               if (taskTitle === titleInput.value) {
-                  alert("Invalid task name! Task names must be different.");
-                  return;
+               if (i !== Number(taskIndex) && projects[key][i].title === newTitle) {       // exclud the task being edited
+                  isDuplicate = true;
+                  break;
                }
             }
-
-            projects[key][taskIndex].changeTitle(titleInput.value);
+      
+            if (isDuplicate) {
+               alert("Invalid task name! Task names must be different.");
+               return;
+            }
+      
+            projects[key][taskIndex].changeTitle(newTitle);
             projects[key][taskIndex].changeDescription(descTextarea.value);
             projects[key][taskIndex].changeDueDate(dateInput.value);
             projects[key][taskIndex].changePriority(selectedOption.text);
          }
-      }
+      }  
    }
 
    collectAllTasks();         // usually for getting task in inbox into today or this week
