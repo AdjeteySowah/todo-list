@@ -1,20 +1,24 @@
-# Restaurant
-This project is part of [The Odin Project's Full Stack JavaScript course - JavaScript](https://www.theodinproject.com/paths/full-stack-javascript/courses/javascript). It's a ...
+
+# To-Do List App
+This project is part of [The Odin Project's Full Stack JavaScript course - JavaScript](https://www.theodinproject.com/paths/full-stack-javascript/courses/javascript). It is a simple yet functional task management app that allows users to organize their tasks and projects efficiently using JavaScript modules and dynamic DOM manipulation.
 
 ## Features
-- 
+- Create, view, and delete to-do items  
+- Organize tasks into projects  
+- Prioritize tasks
+- Visual indicators for overdue tasks    
+- Data persistence using localStorage  
+- Modular, maintainable code structure with Webpack
 
 ## Technologies Used
-- HTML & CSS
-- JavaScript
-- Webpack
+- HTML & CSS  
+- JavaScript (ES6 Modules)  
+- Webpack  
 - Node.js (for package management)
 
 ## Credits
-- **SVGs/Icons**: [Material Design Icons](https://pictogrammers.com/library/mdi/)
-- **Images**: [Microsoft Copilot](https://copilot.microsoft.com/)
-- **Main Background Image**: [Wikipedia](https://en.wikipedia.org/wiki/Pizza#/media/File:Pizza-3007395.jpg)
-- **Fonts**: [Google Fonts](https://fonts.google.com/)
-- Special thanks to [The Odin Project](https://www.theodinproject.com/) for the project idea and learning resources.
+- **Icons**: [Material Design Icons](https://pictogrammers.com/library/mdi/)  
+- **Fonts**: [Google Fonts](https://fonts.google.com/)  
+- Special thanks to [The Odin Project](https://www.theodinproject.com/) for the project idea and learning materials
 
 [Live website](https://adjeteysowah.github.io/todo-list/)
