@@ -1,25 +1,31 @@
 
 import { renderProjectSection } from "./ui";
 import { collectAllTasks } from "./filterSort";
+import { storeInLocalStorage } from "./storage";
 
-export let projects = {
-   "Gym": [],
-   "Coding": [],
-};
+export let projects = {};
 
 export function createProject() {
    let sidebar = document.querySelector(".sidebar");
+   let sidebarProjItems = sidebar.querySelectorAll(".sidebar__project-item");
    let projectInputValue = sidebar.querySelector(".input").value.trim();
-   if (projectInputValue === "") {
+   let formattedProjectInputValue = ` ${projectInputValue.charAt(0).toUpperCase()}${projectInputValue.slice(1).toLowerCase()}`;
+
+   for (let i = 0; i < sidebarProjItems.length; i++) {
+      let projItem = sidebarProjItems[i];
+      if (projItem.dataset.value === formattedProjectInputValue) {
+         alert("Invalid project name! A project with the same name already exists.");
+         return;
+      }
+   }
+
+   if (formattedProjectInputValue === " Inbox" || formattedProjectInputValue === " Today" || formattedProjectInputValue === " This week" || projectInputValue === "") {
       alert("Invalid project name! Please enter a valid name.");
       return;
    }
-   let formattedProjectInputValue = `${projectInputValue.charAt(0).toUpperCase()}${projectInputValue.slice(1).toLowerCase()}`;
-   if (formattedProjectInputValue === "Inbox" || formattedProjectInputValue === "Today" || formattedProjectInputValue === "This week") {
-      alert("Invalid project name! Please enter a valid name.");
-      return;
-   }
-   projects[formattedProjectInputValue] = [];
+
+   projects[formattedProjectInputValue.trim()] = [];
+   storeInLocalStorage();
 }
 
 export function deleteProject(selectedElement) {
@@ -27,9 +33,11 @@ export function deleteProject(selectedElement) {
    for (let key in projects) {
       if (key === selectedElement.closest(".main-content").firstElementChild.textContent) {
          projects[key] = [];
-         collectAllTasks();
          delete projects[key];
+         collectAllTasks();
       }
    }
+
    renderProjectSection(projectName);
+   storeInLocalStorage();
 }
