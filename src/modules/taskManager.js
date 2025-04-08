@@ -15,9 +15,18 @@ export function addTaskToArray() {
    if (activeTab.firstElementChild.textContent.trim() === "Inbox") {
       let mainContent = document.querySelector(".main-content");
       let taskInput = mainContent.querySelector(".input");
+      
       if (taskInput.value === "") {
          alert("Invalid task name! Please enter a valid name.");
-      } else {
+      } else if (taskInput.value !== "") {
+         for (let i = 0; i < inboxTasks.length; i++) {
+            let taskTitle = inboxTasks[i].title;
+            if (taskTitle === taskInput.value) {
+               alert("Invalid task name! Task names must be different.");
+               return;
+            }
+         }
+
          let newTask = createTask(taskInput.value, undefined, undefined, undefined, "Inbox");
          inboxTasks.push(newTask);
       }
@@ -31,6 +40,14 @@ export function addTaskToArray() {
 
       for (let key in projects) {
          if (key === activeTab.firstElementChild.textContent.trim()) {
+            for (let i = 0; i < projects[key].length; i++) {
+               let taskTitle = projects[key][i].title;
+               if (taskTitle === titleInput.value) {
+                  alert("Invalid task name! Task names must be different.");
+                  return;
+               }
+            }
+
             let newTask = createTask(titleInput.value, descTextarea.value, formatDate(dateInput.value), selectedOption.text, key);
             projects[key].push(newTask);
          }
@@ -59,7 +76,6 @@ export function updateTaskStatus(event) {
       }
    }
 
-   collectAllTasks();
    storeInLocalStorage();
 }
 
@@ -75,16 +91,40 @@ export function updateTaskDetails() {
    let selectedOption = prioSelect.options[prioSelect.selectedIndex];
 
    if (activeTab.firstElementChild.textContent.trim() === "Inbox") {
+      for (let i = 0; i < inboxTasks.length; i++) {
+         let taskTitle = inboxTasks[i].title;
+         if (taskTitle === titleInput.value) {
+            alert("Invalid task name! Task names must be different.");
+            return;
+         }
+      }
+
       inboxTasks[taskIndex].changeTitle(titleInput.value);
       inboxTasks[taskIndex].changeDescription(descTextarea.value);
       inboxTasks[taskIndex].changeDueDate(dateInput.value);
       inboxTasks[taskIndex].changePriority(selectedOption.text);
    } else if (activeTab.firstElementChild.textContent.trim() === "Today") {
+      for (let i = 0; i < tasksForToday.length; i++) {
+         let taskTitle = tasksForToday[i].title;
+         if (taskTitle === titleInput.value) {
+            alert("Invalid task name! Task names must be different.");
+            return;
+         }
+      }
+
       tasksForToday[taskIndex].changeTitle(titleInput.value);
       tasksForToday[taskIndex].changeDescription(descTextarea.value);
       tasksForToday[taskIndex].changeDueDate(dateInput.value);
       tasksForToday[taskIndex].changePriority(selectedOption.text);
    } else if (activeTab.firstElementChild.textContent.trim() === "This week") {
+      for (let i = 0; i < tasksForTheWeek.length; i++) {
+         let taskTitle = tasksForTheWeek[i].title;
+         if (taskTitle === titleInput.value) {
+            alert("Invalid task name! Task names must be different.");
+            return;
+         }
+      }
+
       tasksForTheWeek[taskIndex].changeTitle(titleInput.value);
       tasksForTheWeek[taskIndex].changeDescription(descTextarea.value);
       tasksForTheWeek[taskIndex].changeDueDate(dateInput.value);
@@ -92,6 +132,14 @@ export function updateTaskDetails() {
    } else {
       for (let key in projects) {
          if (key === activeTab.firstElementChild.textContent.trim()) {
+            for (let i = 0; i < projects[key].length; i++) {
+               let taskTitle = projects[key][i].title;
+               if (taskTitle === titleInput.value) {
+                  alert("Invalid task name! Task names must be different.");
+                  return;
+               }
+            }
+
             projects[key][taskIndex].changeTitle(titleInput.value);
             projects[key][taskIndex].changeDescription(descTextarea.value);
             projects[key][taskIndex].changeDueDate(dateInput.value);
@@ -100,7 +148,7 @@ export function updateTaskDetails() {
       }
    }
 
-   collectAllTasks();
+   collectAllTasks();         // usually for getting task in inbox into today or this week
    storeInLocalStorage();
 }
 
