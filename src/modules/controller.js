@@ -41,10 +41,11 @@ export function listenForClicksInSidebar() {
    sidebar.addEventListener("click", handleClicksInSidebar);
 }
 
+   // This could probably end up in the utility module as well.
 function scrollDown() {
    let sidebar = document.querySelector(".sidebar");
  
-      // In handleAddTaskClick, input is rendered before scrollDown is called. Using setTimeout is just to overemphasize
+      // In handleAddTaskClick(when a project is entered and added), input is rendered before scrollDown is called. Using setTimeout is just to overemphasize
    setTimeout(() => {
       sidebar.scrollTo({ top: sidebar.scrollHeight, behavior: "smooth" });
    }, 0);
@@ -56,6 +57,7 @@ function scrollDown() {
 function handleAddTaskClick(event) {
    let form = document.querySelector(".dialog__form");
 
+      // or selectedElement is Add Project
    let selectedElementInInbox = event.target.closest(".show-input");
    let selectedElement = event.target.closest(".main-content__action--add-task");
    if (selectedElementInInbox) {
