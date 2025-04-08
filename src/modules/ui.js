@@ -21,13 +21,13 @@ export function setActiveTab(selectedTab) {
    });
 }
 
-   // display newly added projects in the sidebar
+   // SIDEBAR
 export function renderProjectSection(selectedElement) {
    let sidebar = document.querySelector(".sidebar");
-   let sidebarProjItems = document.querySelectorAll(".sidebar__project-item");
+   let sidebarProjItems = sidebar.querySelectorAll(".sidebar__project-item");
    let projectInput = sidebar.querySelector(".input");
 
-      // when cancel is clicked
+         // when cancel is clicked
    if (projectInput && selectedElement) {
       let projectSection = document.querySelector(".sidebar__project-section");
       let projectSectionLastChild = sidebar.querySelector(".input-action");
@@ -44,7 +44,18 @@ export function renderProjectSection(selectedElement) {
 
       projectSection.removeChild(projectSectionLastChild);
       projectSection.appendChild(addProjectTab);
-         // when a project is actually added or when the page is loaded
+
+         // when delete project is clicked
+   } else if (selectedElement !== undefined) {
+      let projectsContainer = sidebar.querySelector(".sidebar__projects-container");
+      let projectToBeRemoved = projectsContainer.querySelector(`.sidebar__project-item[data-value=" ${selectedElement}"]`);
+      projectsContainer.removeChild(projectToBeRemoved);
+
+      let inboxTabElement = sidebar.querySelector(".sidebar__main-section").firstElementChild;
+      setActiveTab(inboxTabElement);
+      renderTabContent();
+
+         // when add is clicked or when the page is loaded
    } else if ((projectInput && projectInput.value !== "") || Object.keys(retrievedProjectsObject).length > 0) {
       let taskInputValue;
       let formattedTaskInputValue;
@@ -54,12 +65,22 @@ export function renderProjectSection(selectedElement) {
          formattedTaskInputValue = ` ${taskInputValue.charAt(0).toUpperCase()}${taskInputValue.slice(1).toLowerCase()}`;
       }
 
+            // when a valid project name is entered and added
       if (formattedTaskInputValue !== " Inbox" && formattedTaskInputValue !== " Today" && formattedTaskInputValue !== " This week" && formattedTaskInputValue !== undefined && formattedTaskInputValue !== " ") {
-         let projectSection = document.querySelector(".sidebar__project-section");
+         for (let i = 0; i < sidebarProjItems.length; i++) {
+            let projItem = sidebarProjItems[i];
+            if (projItem.dataset.value === formattedTaskInputValue) {
+               return;
+            }
+         }
+
+         let projectSection = sidebar.querySelector(".sidebar__project-section");
          let projectSectionLastChild = sidebar.querySelector(".input-action");
 
-         if (!selectedElement) {
-            let projectsContainer = document.querySelector(".sidebar__projects-container");
+         if (!selectedElement) {    // when add is clicked, there might be no argument when this fxn is called.
+                                    // hence the parameter is set to undefined. "!selectedElement" makes the condition
+                                    // truthy hence running the block of code even though the fxn was called with no arg 
+            let projectsContainer = sidebar.querySelector(".sidebar__projects-container");
             let project = document.createElement("div");
             project.setAttribute("class", "sidebar__item sidebar__project-item");
             project.setAttribute("data-value", `${formattedTaskInputValue}`);
@@ -95,37 +116,28 @@ export function renderProjectSection(selectedElement) {
          projectSection.removeChild(projectSectionLastChild);
          projectSection.appendChild(addProjectTab);
 
-            // when the page is loaded and some projects are saved in the local storage
+               // when the page is loaded and some projects are saved in the local storage
       } else if (sidebarProjItems.length < Object.keys(retrievedProjectsObject).length) {
          for (let key in projects) {
-            let projectsContainer = document.querySelector(".sidebar__projects-container");
+            let projectsContainer = sidebar.querySelector(".sidebar__projects-container");
    
             let project = document.createElement("div");
             project.setAttribute("class", "sidebar__item sidebar__project-item");
-            project.setAttribute("data-value", `${key}`);
+            project.setAttribute("data-value", ` ${key}`);
             let descriptionDiv = document.createElement("div");
             descriptionDiv.setAttribute("class", "sidebar__item-description");
             let img1 = document.createElement("img");
             img1.setAttribute("class", "sidebar__item-img");
             img1.setAttribute("src", listTask);
             img1.setAttribute("alt", "task-list icon");
-            let textNode1 = document.createTextNode(key);
+            let textNode1 = document.createTextNode(` ${key}`);
             descriptionDiv.appendChild(img1);
             descriptionDiv.appendChild(textNode1);
             project.appendChild(descriptionDiv);
    
             projectsContainer.appendChild(project);
          }
-      }
-         // when delete project is clicked    
-   } else if (selectedElement !== undefined) {
-      let projectsContainer = sidebar.querySelector(".sidebar__projects-container");
-      let projectToBeRemoved = projectsContainer.querySelector(`.sidebar__project-item[data-value=" ${selectedElement}"]`);
-      projectsContainer.removeChild(projectToBeRemoved);
-
-      let inboxTabElement = sidebar.querySelector(".sidebar__main-section").firstElementChild;
-      setActiveTab(inboxTabElement);
-      renderTabContent();  
+      }    
    }
 }
 
@@ -148,6 +160,8 @@ export function updateBadgeNumber() {
    }
 }
 
+
+   // MAIN CONTENT
 function createTasksElement(taskArray) {
    let div1 = document.createElement("div");
    div1.setAttribute("class", "main-content__tasks");
@@ -290,6 +304,44 @@ export function renderTabContent(selectedElement) {
    listenForClicksInMain();
 }
 
+export function fadeAndStrikeThroughTask(event) {
+   let selectedElement = event.target.closest(".main-content__task");
+   let taskIndex = event.target.closest(".main-content__task").getAttribute("data-index");
+   if (selectedElement) {
+      if (selectedElement.closest(".main-content").firstElementChild.textContent === "Inbox") {
+         if (inboxTasks[taskIndex].completed === false) {
+            selectedElement.classList.add("fade", "strike-through");
+         } else {
+            selectedElement.classList.remove("fade", "strike-through");
+         }
+      } else if (selectedElement.closest(".main-content").firstElementChild.textContent === "Today") {
+         if (tasksForToday[taskIndex].completed === false) {
+            selectedElement.classList.add("fade", "strike-through");
+         } else {
+            selectedElement.classList.remove("fade", "strike-through");
+         }
+      } else if (selectedElement.closest(".main-content").firstElementChild.textContent === "This week") {
+         if (tasksForTheWeek[taskIndex].completed === false) {
+            selectedElement.classList.add("fade", "strike-through");
+         } else {
+            selectedElement.classList.remove("fade", "strike-through");
+         }
+      } else {
+         for (let key in projects) {
+            if (key === selectedElement.closest(".main-content").firstElementChild.textContent) {
+               if (projects[key][taskIndex].completed === false) {
+                  selectedElement.classList.add("fade", "strike-through");
+               } else {
+                  selectedElement.classList.remove("fade", "strike-through");
+               }
+            }
+         }
+      }
+   }
+}
+
+
+   // COMMON
 export function renderInput(selectedElement) {
    let mainContent = document.querySelector(".main-content");
    let mainContLastChild = document.querySelector(".main-content__action--add-task");
@@ -330,42 +382,8 @@ export function renderInput(selectedElement) {
    input.focus();
 }
 
-export function fadeAndStrikeThroughTask(event) {
-   let selectedElement = event.target.closest(".main-content__task");
-   let taskIndex = event.target.closest(".main-content__task").getAttribute("data-index");
-   if (selectedElement) {
-      if (selectedElement.closest(".main-content").firstElementChild.textContent === "Inbox") {
-         if (inboxTasks[taskIndex].completed === false) {
-            selectedElement.classList.add("fade", "strike-through");
-         } else {
-            selectedElement.classList.remove("fade", "strike-through");
-         }
-      } else if (selectedElement.closest(".main-content").firstElementChild.textContent === "Today") {
-         if (tasksForToday[taskIndex].completed === false) {
-            selectedElement.classList.add("fade", "strike-through");
-         } else {
-            selectedElement.classList.remove("fade", "strike-through");
-         }
-      } else if (selectedElement.closest(".main-content").firstElementChild.textContent === "This week") {
-         if (tasksForTheWeek[taskIndex].completed === false) {
-            selectedElement.classList.add("fade", "strike-through");
-         } else {
-            selectedElement.classList.remove("fade", "strike-through");
-         }
-      } else {
-         for (let key in projects) {
-            if (key === selectedElement.closest(".main-content").firstElementChild.textContent) {
-               if (projects[key][taskIndex].completed === false) {
-                  selectedElement.classList.add("fade", "strike-through");
-               } else {
-                  selectedElement.classList.remove("fade", "strike-through");
-               }
-            }
-         }
-      }
-   }
-}
 
+   // MODAL
 export function showModal() {
    let body = document.querySelector("body");
    let dialog = document.querySelector(".dialog");
