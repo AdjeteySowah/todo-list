@@ -434,15 +434,15 @@ img {
 
 
    /* || SLIDE IN MENU/DROPDOWN */
-.si-toggle {
+   /* The inclusion of body in the selector is to increase specificity as that will in turn help in overriding styles from the packages */
+body .si-toggle {
    top: 2.7rem;
    left: 2rem;
-   background-color: transparent;
 }
 
-.si-toggle .bar,
-.si-toggle .bar::before,
-.si-toggle .bar::after {
+body .si-toggle .bar,
+body .si-toggle .bar::before,
+body .si-toggle .bar::after {
    background: var(--white);
 }
 
@@ -470,18 +470,19 @@ img {
 
 
    /* || MEDIA QUERY */
+   /* The inclusion of body/html in the selector is to increase specificity as that will in turn help in overriding styles from the packages */
 @media screen and (min-width: 900px) {
-   .si-toggle {
+   body .si-toggle {
       display: none;
    }
 
-   .slide-in {
+   body .slide-in {
       position: static;
    }
 }
 
 @media screen and (max-width: 899px) {
-   body {
+   html body {
       grid-template-areas: 
          "hd hd hd hd hd hd hd hd hd"
          "mn mn mn mn mn mn mn mn mn"
@@ -489,45 +490,63 @@ img {
       grid-template-rows: 6rem 1fr 4rem;
    }
 
-   .header {
-      font-size: 2.6rem;
+   body .header {
+      font-size: 2.8rem;
       justify-content: center;
    }
 
-   .header__img {
+   body .header__img {
       width: 2.5rem;
       height: 2.5rem;
    }
 
-   .slide-in {
+   body .slide-in {
       left: -1000%;
       top: 6rem;
       bottom: 0;
+      width: 85%;
       background-color: whitesmoke;
    }
 
-   .main-content {
+   body .main-content {
       padding-left: 5rem;
       padding-right: 5rem;
    }
 
-   .main-content__task {
+   body .main-content__title {
+      font-size: 2.4rem;
+   }
+
+   body .main-content__task {
       display: block;
    }
 
-   .main-content__checkbox-label {
+   body .main-content__checkbox-label {
       margin-bottom: 0.5rem;
    }
 
-   .main-content__task-actions {
+   body .main-content__task-actions {
       justify-content: flex-end;
    }
 
-   .footer {
+   body .footer {
       display: none;
    }
 
-   .dialog {
+   body .dialog {
       width: 90%;
+   }
+}
+
+@media screen and (max-width: 480px) {
+   body .main-content {
+      padding-left: 2rem;
+      padding-right: 2rem;
+   }
+}
+
+@media screen and (min-width: 481px) and (max-width: 899px) {
+   body .slide-in {
+      width: 40%;
    }
 }
