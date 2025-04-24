@@ -1,3 +1,4 @@
+import { slideMenu } from "../index.js";
 
 import { setActiveTab, renderProjectSection, renderTabContent, renderInput, fadeAndStrikeThroughTask, showModal, slideupModal, closeModal, fillForm } from "./ui.js";
 import { addTaskToArray, removeTaskFromArray, updateTaskStatus, updateTaskDetails } from "./taskManager.js";
@@ -11,6 +12,7 @@ function handleTabClick(event) {
    if (selectedTab) {
       setActiveTab(selectedTab);
       renderTabContent();
+      slideMenu.toggleSidebar();
    }
 }
 
