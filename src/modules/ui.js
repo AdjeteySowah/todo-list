@@ -14,9 +14,9 @@ import plus from "../assets/images/plus.svg";
 export function setActiveTab(selectedTab) {
    let sidebarTabs = document.querySelectorAll(".sidebar__item");
    sidebarTabs.forEach((tab) => {
-      tab.classList.remove("active");
+      tab.classList.remove("active-tab");
       tab.classList.remove("bold");
-      selectedTab.classList.add("active");
+      selectedTab.classList.add("active-tab");
       selectedTab.classList.add("bold");
    });
 }
@@ -231,7 +231,7 @@ export function renderTabContent(selectedElement) {
       return;
    }
 
-   let activeTab = document.querySelector(".active");
+   let activeTab = document.querySelector(".active-tab");
    mainContent.innerHTML = "";
       // title
    let h2 = document.createElement("h2");
