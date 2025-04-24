@@ -500,7 +500,7 @@ img {
    }
 
    .slide-in {
-      left: -200%;
+      left: -1000%;
       top: 6rem;
       bottom: 0;
       background-color: whitesmoke;
