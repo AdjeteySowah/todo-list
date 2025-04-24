@@ -10,7 +10,7 @@ import { storeInLocalStorage } from "./storage.js";
 export let inboxTasks = [];
 
 export function addTaskToArray() {
-   let activeTab = document.querySelector(".active");
+   let activeTab = document.querySelector(".active-tab");
 
    if (activeTab.firstElementChild.textContent.trim() === "Inbox") {
       let mainContent = document.querySelector(".main-content");
@@ -81,7 +81,7 @@ export function updateTaskStatus(event) {
 
    // shows modal before editing can be done
 export function updateTaskDetails() {
-   let activeTab = document.querySelector(".active");
+   let activeTab = document.querySelector(".active-tab");
    let taskIndex = taskEditClickEventTarget.closest(".main-content__task").getAttribute("data-index");
 
    let titleInput = document.querySelector("input[type='text']");
